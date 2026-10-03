@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#087f75">
+  <meta name="description" content="Un laboratorio interactivo para aprender a evaluar la condición física antes de prescribir ejercicio con FITT-VP.">
+  <title>FITT Lab · Evalúa antes de prescribir</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23087f75'/%3E%3Cpath d='M10 34h10l6-16 11 30 6-14h11' fill='none' stroke='white' stroke-width='4'/%3E%3C/svg%3E">
+  <style>
+:root { --ink:#172e36; --muted:#536c72; --teal:#087f75; --teal-dark:#06675f; --light:#e9f4f0; --paper:#f6f7f3; --line:#dce4df; --orange:#a95625; --orange-bg:#fff2e6; --white:#fff; --radius:18px; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font-family:system-ui,-apple-system,"Segoe UI",sans-serif; font-size:15px; line-height:1.6; }
+    button,input,select { font:inherit; }
+    button,a,select { -webkit-tap-highlight-color:transparent; }
+    button { cursor:pointer; }
+    button:disabled { cursor:not-allowed; opacity:.45; }
+    button:focus-visible,a:focus-visible,select:focus-visible,summary:focus-visible { outline:3px solid var(--teal); outline-offset:4px; }
+    a { color:var(--teal-dark); text-underline-offset:3px; }
+    h1,h2,h3,p { margin-top:0; }
+    h1,h2,h3 { line-height:1.15; }
+    h1,h2 { letter-spacing:-.035em; }
+    h1 { font-size:clamp(38px,5.2vw,68px); font-weight:600; }
+    h2 { font-size:32px; }
+    h3 { font-size:18px; }
+    .serif { font-family:Georgia,"Times New Roman",serif; font-weight:400; }
+    .muted { color:var(--muted); }
+    .tiny { font-size:12px; }
+    .eyebrow { font-size:11px; font-weight:750; letter-spacing:.15em; text-transform:uppercase; }
+    .icon { width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; flex-shrink:0; }
+    .skip { position:absolute; left:16px; top:-60px; background:white; padding:12px; z-index:100; }
+    .skip:focus { top:8px; }
+    header { height:86px; border-bottom:1px solid var(--line); background:#fafbf8; }
+    .header-inner { max-width:1240px; padding:0 36px; height:100%; margin:auto; display:flex; align-items:center; justify-content:space-between; gap:16px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand-mark { width:40px; height:40px; background:var(--teal); color:white; border-radius:12px; display:grid; place-items:center; }
+    .wordmark { font-size:24px; font-weight:800; letter-spacing:-1px; line-height:1; }
+    .wordmark span { font-weight:400; color:var(--teal); }
+    .brand-sub { font-size:9px; letter-spacing:.14em; margin-top:6px; }
+    .header-tools { display:flex; align-items:center; gap:12px; }
+    .text-btn { background:none; border:0; padding:9px 10px; color:var(--muted); display:flex; align-items:center; gap:7px; border-radius:8px; }
+    .text-btn:hover { background:var(--light); color:var(--teal-dark); }
+    .pill { padding:6px 12px; font-size:11px; font-weight:650; border:1px solid var(--line); border-radius:100px; display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+    .dot { width:6px; height:6px; border-radius:50%; background:var(--teal); }
+    .container { max-width:1240px; margin:auto; padding:42px 36px 28px; }
+    .btn { border:1px solid var(--teal); border-radius:10px; min-height:48px; padding:12px 23px; font-size:14px; font-weight:650; display:inline-flex; align-items:center; justify-content:center; gap:10px; background:var(--teal); color:white; transition:background .15s,transform .15s; text-decoration:none; }
+    .btn:hover:not(:disabled) { background:var(--teal-dark); transform:translateY(-1px); }
+    .btn.secondary { background:white; color:var(--ink); border-color:var(--line); }
+    .btn.secondary:hover:not(:disabled) { background:var(--light); }
+    .btn.small { min-height:38px; padding:8px 15px; font-size:12px; }
+    .hero { display:grid; grid-template-columns:1.12fr .88fr; gap:58px; padding:24px 0 42px; align-items:center; }
+    .hero-tag { display:inline-flex; align-items:center; gap:7px; color:var(--teal-dark); margin-bottom:24px; }
+    .hero h1 { margin-bottom:24px; }
+    .hero h1 .serif { color:var(--teal); }
+    .lead { font-size:16px; color:var(--muted); max-width:490px; line-height:1.75; }
+    .hero-actions { display:flex; align-items:center; gap:18px; margin-top:28px; flex-wrap:wrap; }
+    .meta-line { margin-top:18px; display:flex; gap:20px; color:var(--muted); font-size:12px; flex-wrap:wrap; }
+    .meta-line span { display:flex; gap:5px; align-items:center; }
+    .meta-line .icon { width:15px; height:15px; }
+    .case-preview { background:var(--ink); color:#f2f7f3; border-radius:24px; padding:30px; position:relative; overflow:hidden; box-shadow:0 14px 28px #172e3612; }
+    .case-preview:after { content:""; width:250px; height:250px; border:1px solid #ffffff0e; border-radius:50%; position:absolute; top:-100px; right:-70px; pointer-events:none; }
+    .case-preview .eyebrow { color:#a8cac1; }
+    .case-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:27px; }
+    .case-top .pill { border-color:#ffffff30; color:#d7ece5; }
+    .person { display:flex; align-items:center; gap:16px; margin-bottom:22px; }
+    .avatar { width:58px; height:58px; border-radius:50%; background:#c9e6da; color:var(--ink); display:grid; place-items:center; font:26px Georgia,serif; }
+    .person h2 { font-size:27px; margin:0 0 4px; }
+    .person p { margin:0; color:#b7cdc7; font-size:12px; }
+    .case-facts { display:grid; grid-template-columns:1fr 1fr; border-top:1px solid #ffffff20; border-bottom:1px solid #ffffff20; margin-bottom:20px; }
+    .case-facts div { padding:16px 0; }
+    .case-facts div+div { padding-left:24px; border-left:1px solid #ffffff20; }
+    .case-facts strong { display:block; font-size:22px; font-weight:500; }
+    .case-facts span { color:#b7cdc7; font-size:11px; }
+    .case-quote { font:italic 19px/1.55 Georgia,serif; margin-bottom:20px; }
+    .case-bottom { display:flex; gap:10px; padding-top:17px; border-top:1px solid #ffffff20; color:#b7cdc7; font-size:12px; }
+    .section-head { display:flex; justify-content:space-between; gap:18px; align-items:center; border-top:1px solid var(--line); padding-top:28px; margin-bottom:20px; }
+    .section-head h2 { font-size:20px; margin:0; }
+    .pillars { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+    .pillar { text-align:left; border:1px solid var(--line); border-radius:14px; padding:20px; background:#fff; color:var(--ink); transition:transform .2s,border-color .2s; }
+    .pillar:hover { border-color:var(--teal); transform:translateY(-3px); }
+    .pillar-top { display:flex; justify-content:space-between; align-items:center; color:var(--teal); margin-bottom:16px; }
+    .pillar-num { font-size:11px; color:#536c72; }
+    .pillar h3 { font-size:15px; margin-bottom:8px; line-height:1.35; }
+    .pillar p { font-size:12px; color:var(--muted); margin:0; }
+    .bottom-note { display:flex; align-items:flex-start; gap:10px; margin-top:24px; color:var(--muted); font-size:12px; }
+    footer { max-width:1168px; margin:12px auto 0; padding:20px 0; border-top:1px solid var(--line); color:var(--muted); font-size:11px; display:flex; justify-content:space-between; gap:15px; }
+    .game-layout { display:grid; grid-template-columns:242px minmax(0,1fr); gap:40px; }
+    .rail { align-self:start; position:sticky; top:22px; }
+    .rail-label { margin:0 0 18px; color:var(--muted); }
+    .stage-list { list-style:none; margin:0 0 28px; padding:0; }
+    .stage-list li { display:flex; gap:11px; padding:13px 0; color:var(--muted); align-items:center; }
+    .stage-list li.active { color:var(--teal-dark); font-weight:700; }
+    .stage-list li.done { color:var(--ink); }
+    .stage-circle { width:31px; height:31px; border-radius:50%; border:1px solid var(--line); background:white; display:grid; place-items:center; font-size:12px; flex-shrink:0; }
+    .active .stage-circle { color:white; background:var(--teal); border-color:var(--teal); }
+    .done .stage-circle { background:var(--light); color:var(--teal); }
+    .stage-list strong { font-size:13px; display:block; }
+    .stage-list small { font-size:10px; font-weight:400; display:block; }
+    .rail-case { background:white; border:1px solid var(--line); padding:19px; border-radius:14px; }
+    .rail-case h3 { margin:8px 0 12px; font-size:17px; }
+    .rail-case p { font-size:12px; color:var(--muted); margin-bottom:10px; }
+    .rail-case dl { margin:0; font-size:11px; }
+    .rail-case dt { color:var(--muted); margin-top:8px; }
+    .rail-case dd { margin:0; }
+    .mini-badges { margin:22px 0; display:flex; gap:8px; }
+    .mini-badge { width:37px; height:37px; border:1px dashed #becfc7; border-radius:10px; display:grid; place-items:center; color:#73868b; }
+    .mini-badge.completed { background:var(--light); color:var(--teal); border:1px solid #afcdc2; }
+    .question-panel { min-width:0; }
+    .progress-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:9px; gap:12px; }
+    .progress-head p { margin:0; font-size:12px; color:var(--muted); }
+    .score { color:var(--teal-dark); font-size:12px; font-weight:700; }
+    .progress-track { width:100%; height:5px; border-radius:20px; background:var(--line); margin-bottom:27px; overflow:hidden; }
+    .progress-fill { height:100%; background:var(--teal); transition:width .3s; }
+    .question-card { background:white; border:1px solid var(--line); border-radius:var(--radius); padding:30px; }
+    .q-label { color:var(--teal-dark); display:flex; gap:9px; align-items:center; margin-bottom:15px; }
+    .q-label .icon { width:19px; height:19px; }
+    .question-card h1 { font-size:30px; line-height:1.2; letter-spacing:-.025em; margin-bottom:15px; }
+    .scenario { border-left:3px solid var(--teal); background:#f4f8f5; padding:14px 18px; margin:18px 0; font-size:14px; color:#40595e; }
+    .instruction { font-size:12px; color:var(--muted); margin:0 0 15px; }
+    .options { display:flex; flex-direction:column; gap:10px; }
+    .option { border:1px solid var(--line); background:white; padding:15px 17px; border-radius:11px; display:flex; align-items:center; gap:13px; text-align:left; color:var(--ink); width:100%; transition:background .15s,border-color .15s; font-size:13px; line-height:1.5; }
+    .option:hover:not(:disabled) { background:#f7faf7; border-color:#a2bcb2; }
+    .option.selected { border:2px solid var(--teal); padding:14px 16px; background:var(--light); }
+    .option:disabled { opacity:1; }
+    .option.correct { border-color:var(--teal); background:var(--light); }
+    .option.incorrect { border-color:#d4a888; background:var(--orange-bg); }
+    .option-letter { width:27px; height:27px; display:grid; place-items:center; background:var(--paper); border:1px solid var(--line); border-radius:7px; flex-shrink:0; font-size:11px; font-weight:700; }
+    .selected .option-letter { background:var(--teal); color:white; border-color:var(--teal); }
+    .option-status { margin-left:auto; color:var(--teal-dark); font-size:11px; font-weight:700; flex-shrink:0; }
+    .incorrect .option-status { color:var(--orange); }
+    .decision-bar { border-top:1px solid var(--line); padding-top:20px; margin-top:23px; display:flex; align-items:center; justify-content:space-between; gap:15px; }
+    .decision-bar p { font-size:11px; margin:0; color:var(--muted); }
+    .feedback { padding:20px; border-radius:12px; margin-top:22px; background:var(--light); border:1px solid #bdd8ca; }
+    .feedback.warning { background:var(--orange-bg); border-color:#edd0b9; }
+    .feedback h2 { display:flex; gap:8px; align-items:center; font-size:17px; letter-spacing:0; margin:0 0 11px; color:var(--teal-dark); }
+    .feedback.warning h2 { color:var(--orange); }
+    .feedback p { font-size:13px; margin-bottom:10px; }
+    .feedback p:last-child { margin:0; }
+    .feedback .key { border-top:1px solid #b8d2c5; padding-top:12px; margin-top:12px; }
+    .feedback.warning .key { border-color:#e5c5aa; }
+    .match-rows { display:flex; flex-direction:column; gap:9px; }
+    .match-row { display:grid; grid-template-columns:42px minmax(0,1fr); align-items:center; gap:14px; padding:10px 13px; border:1px solid var(--line); border-radius:9px; }
+    .match-row label { font-size:20px; color:var(--teal-dark); font-weight:750; }
+    select { width:100%; min-width:0; padding:11px 32px 11px 12px; border:1px solid #c7d5cc; border-radius:7px; color:var(--ink); background:white; font-size:13px; min-height:43px; }
+    .match-row.correct { background:var(--light); }
+    .match-row.incorrect { background:var(--orange-bg); }
+    .match-row small { grid-column:2; font-size:11px; }
+    .result-layout { max-width:890px; margin:0 auto; }
+    .result-top { text-align:center; padding:12px 0 25px; }
+    .result-stamp { display:inline-flex; color:var(--teal); background:var(--light); padding:13px; border-radius:16px; margin-bottom:17px; }
+    .result-stamp .icon { width:31px; height:31px; }
+    .result-top h1 { font-size:43px; margin:10px 0 16px; }
+    .result-top .lead { margin:0 auto; }
+    .result-stats { display:grid; grid-template-columns:repeat(3,1fr); margin:22px 0; border:1px solid var(--line); border-radius:14px; background:white; }
+    .result-stats div { text-align:center; padding:19px 10px; }
+    .result-stats div+div { border-left:1px solid var(--line); }
+    .result-stats strong { display:block; color:var(--teal-dark); font-size:30px; letter-spacing:-1px; }
+    .result-stats span { font-size:11px; color:var(--muted); }
+    .domain-results { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:22px; }
+    .domain-result { padding:18px; border:1px solid var(--line); border-radius:12px; background:white; display:flex; align-items:center; gap:13px; }
+    .domain-result .icon { color:var(--teal); }
+    .domain-result h3 { font-size:13px; margin:0 0 5px; }
+    .domain-result p { font-size:11px; color:var(--muted); margin:0; }
+    .domain-result strong { margin-left:auto; font-size:13px; color:var(--teal-dark); white-space:nowrap; }
+    .summary-box { background:white; border:1px solid var(--line); border-radius:14px; padding:23px; margin:16px 0; }
+    .summary-box h2 { font-size:20px; }
+    .summary-box p,.summary-box li { font-size:13px; }
+    .summary-box ul { margin:0; padding-left:20px; }
+    .fitt-strip { display:grid; grid-template-columns:repeat(6,1fr); border:1px solid var(--line); border-radius:10px; margin-top:20px; overflow:hidden; }
+    .fitt-strip div { padding:15px 4px; text-align:center; background:#f3f8f4; }
+    .fitt-strip div+div { border-left:1px solid var(--line); }
+    .fitt-strip strong { display:block; color:var(--teal); font-size:22px; }
+    .fitt-strip span { font-size:9px; color:var(--muted); }
+    details { border:1px solid var(--line); background:white; border-radius:10px; margin-top:10px; padding:14px 17px; }
+    summary { cursor:pointer; font-size:13px; font-weight:650; }
+    .review-content { margin-top:13px; font-size:12px; }
+    .review-content p { margin-bottom:8px; }
+    .review-status { color:var(--teal-dark); font-size:11px; }
+    .result-actions { display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin:26px 0; }
+    dialog { border:1px solid var(--line); border-radius:22px; padding:0; max-width:720px; width:calc(100% - 32px); max-height:88vh; color:var(--ink); background:var(--paper); box-shadow:0 20px 100px #172e362d; }
+    dialog::backdrop { background:#112d3673; backdrop-filter:blur(3px); }
+    .modal-head { padding:20px 24px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; background:white; position:sticky; top:0; z-index:1; }
+    .modal-head h2 { font-size:21px; margin:0; }
+    .close-btn { width:35px; height:35px; background:var(--paper); border:1px solid var(--line); border-radius:50%; font-size:24px; line-height:1; color:var(--ink); }
+    .modal-body { padding:24px; }
+    .modal-body h3 { margin-top:22px; }
+    .modal-body p,.modal-body li { font-size:13px; }
+    .atlas-item { background:white; border:1px solid var(--line); padding:20px; border-radius:12px; margin-bottom:12px; }
+    .atlas-item h3 { display:flex; gap:9px; align-items:center; margin:0 0 13px; }
+    .atlas-item p:last-child { margin-bottom:0; }
+    .source { font-size:11px!important; overflow-wrap:anywhere; }
+    .live-notice { text-align:center; color:var(--teal-dark); font-size:12px; min-height:1px; }
+    .fade { animation:appear .24s ease-out; }
+    @keyframes appear { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:translateY(0); } }
+    @media (max-width:1000px) { .hero { gap:30px; } .game-layout { grid-template-columns:210px minmax(0,1fr); gap:25px; } .container { padding:30px 25px; } .header-inner { padding:0 25px; } .question-card { padding:24px; } }
+    @media (max-width:760px) {
+      header { height:auto; min-height:73px; } .header-inner { padding:14px 18px; flex-wrap:wrap; gap:10px; min-height:73px; } .brand-sub,.offline-pill { display:none; } .header-tools { gap:3px; } .text-btn { font-size:11px; padding:8px; } .text-btn .icon { width:17px; height:17px; }
+      .container { padding:24px 18px; } .hero { grid-template-columns:1fr; gap:28px; padding-top:6px; } .hero h1 { font-size:48px; } .hero-tag { margin-bottom:17px; } .lead { font-size:15px; } .case-preview { padding:24px; }
+      .pillars { grid-template-columns:1fr 1fr; gap:10px; } .pillar { padding:17px; } .section-head { align-items:flex-start; } .section-head .tiny { max-width:160px; text-align:right; } .section-head h2 { font-size:18px; }
+      .game-layout { display:flex; flex-direction:column; gap:18px; } .rail { position:static; width:100%; } .rail-label,.rail-case,.mini-badges { display:none; } .rail-reset { margin:10px 0 0 auto; padding:5px; } .rail-reset .icon { width:15px; height:15px; } .stage-list { display:flex; justify-content:space-between; margin:0; gap:4px; } .stage-list li { padding:0; gap:7px; } .stage-list strong { font-size:11px; } .stage-list small { display:none; } .stage-circle { width:27px; height:27px; }
+      .question-card { padding:21px 18px; } .question-card h1 { font-size:25px; } .scenario { padding:12px 14px; } .option { padding:13px 12px; font-size:12px; } .option.selected { padding:12px 11px; } .option-status { max-width:60px; font-size:9px; } .decision-bar { flex-wrap:wrap; } .decision-bar .btn { margin-left:auto; } .feedback { padding:17px; }
+      .result-top h1 { font-size:34px; } .result-stats strong { font-size:24px; } .domain-results { grid-template-columns:1fr; } .fitt-strip { grid-template-columns:repeat(3,1fr); } .fitt-strip div:nth-child(4) { border-left:0; } .fitt-strip div:nth-child(n+4) { border-top:1px solid var(--line); }
+      footer { flex-direction:column; gap:5px; margin-top:0; } .modal-body { padding:19px; } .modal-head { padding:16px 19px; } .modal-head h2 { font-size:19px; }
+    }
+    @media (max-width:380px) { .brand-mark { width:32px; height:32px; } .wordmark { font-size:20px; } .header-tools .icon { display:none; } .hero h1 { font-size:41px; } .stage-list strong { font-size:10px; } .stage-circle { width:23px; height:23px; } .pillar h3 { font-size:13px; } }
+    @media (prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }
+    @media print { header,.rail,.result-actions,footer,dialog { display:none!important; } .container { padding:0; } details { break-inside:avoid; } .result-layout { max-width:none; } body { background:white; } }
+
+.campaign-preview h2 { font-size:34px; line-height:1.2; margin-bottom:24px; }
+.preview-levels { margin:0 0 22px; }
+.preview-levels > div { display:flex; align-items:flex-start; gap:14px; padding:16px 0; border-top:1px solid #ffffff20; }
+.preview-number { font-size:12px; color:#a8cac1; padding-top:3px; }
+.preview-levels strong { font-size:15px; font-weight:650; }
+.preview-levels p { font-size:12px; color:#b7cdc7; margin:5px 0 0; line-height:1.5; }
+.preview-xp { margin-left:auto; white-space:nowrap; font-size:11px; color:#b7cdc7; padding-top:3px; }
+.game-counters { display:flex; justify-content:flex-end; align-items:center; gap:14px; flex-wrap:wrap; }
+.streak { color:var(--muted); font-size:11px; white-space:nowrap; }
+.level-banner { display:flex; justify-content:space-between; align-items:center; gap:15px; border:1px solid #b9d9cc; border-radius:12px; padding:15px 19px; margin-bottom:17px; background:var(--light); }
+.level-banner .eyebrow { color:var(--teal-dark); font-size:9px; display:block; margin-bottom:5px; }
+.level-banner strong { font-size:17px; }
+.level-banner .pill { background:#fff8; border-color:#afcec1; }
+.level-banner.level-2 { background:#eef3fa; border-color:#cbd8ea; }
+.level-banner.level-2 .eyebrow { color:#3c5c7a; }
+.level-banner.level-3 { background:#fff2e6; border-color:#efd2b8; }
+.level-banner.level-3 .eyebrow { color:var(--orange); }
+.case-profile { display:flex; gap:12px; align-items:center; margin:0 0 10px; }
+.case-profile > div { min-width:0; }
+.profile-initial { display:grid; place-items:center; width:39px; height:39px; border-radius:50%; background:var(--light); color:var(--teal-dark); font:19px Georgia,serif; flex-shrink:0; }
+.case-profile strong { font-size:14px; }
+.case-profile p { font-size:11px; line-height:1.5; color:var(--muted); margin:3px 0 0; }
+.case-goal { font-size:12px; color:var(--muted); padding-bottom:16px; border-bottom:1px solid var(--line); margin-bottom:20px; }
+.fitt-bridge { background:#ffffff7d; border-radius:7px; padding:12px; margin-top:13px; }
+.combo-message { font-size:11px!important; color:var(--teal-dark); font-weight:700; }
+.levelup-screen { max-width:760px; text-align:center; margin:20px auto 35px; }
+.levelup-screen h1 { font-size:clamp(33px,4.8vw,53px); margin:17px 0 21px; }
+.levelup-screen .serif { color:var(--teal); }
+.levelup-screen .lead { margin:0 auto; }
+.levelup-stats { display:flex; justify-content:center; gap:25px; margin:22px 0; font-size:12px; color:var(--muted); }
+.levelup-stats strong { color:var(--teal-dark); font-size:19px; }
+.unlocked-card { background:var(--ink); color:white; padding:27px; border-radius:20px; max-width:510px; margin:27px auto 19px; }
+.unlocked-card .eyebrow,.unlocked-card p { color:#b7cdc7; }
+.unlocked-card h2 { margin:10px 0 15px; font-size:34px; }
+.unlocked-card p { font-size:14px; }
+.unlocked-card .pill { color:#d7ece5; border-color:#ffffff30; }
+.levelup-screen > .tiny { max-width:520px; margin:0 auto 23px; }
+.levelup-screen > .text-btn { margin:14px auto 0; }
+.level-results { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:22px 0 27px; }
+.level-result { border:1px solid var(--line); background:white; padding:19px; border-radius:13px; }
+.level-result .eyebrow { font-size:9px; color:var(--muted); }
+.level-result h3 { margin:12px 0; font-size:17px; }
+.level-result p { margin:0 0 10px; font-size:12px; color:var(--muted); }
+.level-result p strong { color:var(--teal-dark); }
+.level-medal { display:block; padding-top:10px; border-top:1px solid var(--line); font-size:10px; color:var(--teal-dark); }
+@media (max-width:760px) {
+  .stage-list { gap:8px; }
+  .stage-list li { flex:1; flex-direction:column; text-align:center; gap:6px; min-width:0; }
+  .stage-list strong { font-size:10px; }
+  .game-counters { max-width:51%; gap:2px 8px; }
+  .progress-head { align-items:flex-start; }
+  .progress-head p { font-size:11px; }
+  .level-banner { padding:13px; }
+  .level-banner .eyebrow { letter-spacing:.09em; }
+  .level-banner strong { font-size:15px; }
+  .level-banner .pill { font-size:10px; padding:5px 8px; }
+  .level-results { grid-template-columns:1fr; gap:10px; }
+  .level-result h3 { margin:8px 0; }
+  .campaign-preview h2 { font-size:29px; }
+  .levelup-stats { gap:15px; flex-wrap:wrap; }
+  .unlocked-card { padding:23px 20px; }
+  .unlocked-card h2 { font-size:30px; }
+}
+
+</style>
+</head>
+<body>
+  <a class="skip" href="#main">Saltar al contenido</a>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+    <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12h5l3-8 5 16 3-8h4"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h16m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 5v15M3 4c4-1 6 0 9 2 3-2 5-3 9-2v15c-4-1-6 0-9 2-3-2-5-3-9-2z"/></symbol>
+    <symbol id="i-body" viewBox="0 0 24 24"><circle cx="12" cy="4" r="2"/><path d="M5 9h14M9 9l1 6-2 6m7-12-1 6 2 6m-6-6h4"/></symbol>
+    <symbol id="i-strength" viewBox="0 0 24 24"><path d="M7 12h10M3 8v8m4-10v12m10-12v12m4-10v8M3 12h4m10 0h4"/></symbol>
+    <symbol id="i-flex" viewBox="0 0 24 24"><circle cx="15" cy="4" r="2"/><path d="m13 8-3 5 7 7m-7-7-6 7m6-7 7-3 4 3M4 5v8h4"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 3 7v6c0 5 9 9 9 9s9-4 9-9V7zM8 12l3 3 5-6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v.1"/></symbol>
+    <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="6"/><path d="m8 14-2 8 6-3 6 3-2-8m-6-13 1 2 2 .3-1.5 1.5.4 2.2L10 7"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 9a9 9 0 1 1 0 8M4 3v6h6"/></symbol>
+  </defs></svg>
+  <header>
+    <div class="header-inner">
+      <div class="brand" aria-label="FITT Lab, laboratorio de prescripción">
+        <div class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-pulse"/></svg></div>
+        <div><div class="wordmark">FITT<span> / LAB</span></div><div class="brand-sub">LABORATORIO DE PRESCRIPCIÓN</div></div>
+      </div>
+      <nav class="header-tools" aria-label="Recursos de aprendizaje">
+        <span class="pill offline-pill"><span class="dot"></span> Sin instalación</span>
+        <button class="text-btn" id="atlas-button"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg> Fichas de consulta</button>
+        <button class="text-btn" id="guide-button">Guía de clase</button>
+      </nav>
+    </div>
+  </header>
+  <main class="container" id="main" tabindex="-1"></main>
+  <dialog id="resource-dialog" aria-labelledby="modal-title">
+    <div class="modal-head"><h2 id="modal-title"></h2><button class="close-btn" id="close-dialog" aria-label="Cerrar ventana">×</button></div>
+    <div class="modal-body" id="modal-body"></div>
+  </dialog>
+  <noscript><p style="padding:30px">Este juego requiere JavaScript. Habilítalo en tu navegador para iniciar la actividad. No se necesita conexión a internet.</p></noscript>
+  <script>
+'use strict';
+const DOMAINS = [
+      {id:'cardio', title:'Capacidad cardiorrespiratoria', short:'Cardiorrespiratoria', icon:'pulse', subtitle:'Cómo responde al esfuerzo.', definition:'Capacidad de los sistemas circulatorio y respiratorio para aportar oxígeno durante una actividad sostenida.', test:'Pruebas de campo o submáximas validadas según la población; la caminata de 6 minutos informa sobre capacidad funcional. El análisis de gases en una prueba cardiopulmonar permite medir el consumo de oxígeno.', limit:'La distancia caminada no es una medida directa del VO₂máx. El protocolo, los síntomas, la frecuencia cardiaca y el esfuerzo percibido ayudan a interpretar la respuesta.', link:'Orienta intensidad, tiempo, tipo de actividad aeróbica y progresión.'},
+      {id:'body', title:'Composición corporal', short:'Composición corporal', icon:'body', subtitle:'Más que un número en la balanza.', definition:'Distribución de componentes corporales, como masa grasa y masa libre de grasa. No equivale únicamente al peso.', test:'Pliegues cutáneos o bioimpedancia con técnica, ecuaciones y condiciones apropiadas; DXA si es pertinente y está disponible. Peso, talla y cintura aportan contexto antropométrico.', limit:'El IMC no diferencia músculo y grasa. La bioimpedancia estima componentes y depende, entre otros factores, de hidratación y ecuaciones. La cintura no mide por sí sola toda la composición.', link:'Apoya objetivos realistas y seguimiento; no determina por sí sola la dosis de ejercicio.'},
+      {id:'strength', title:'Fuerza muscular', short:'Fuerza', icon:'strength', subtitle:'Cuánta fuerza puede producir.', definition:'Capacidad de generar tensión o fuerza en una acción muscular. Es distinta de sostener o repetir esfuerzos: eso es resistencia muscular.', test:'Dinamometría de prensión para fuerza de la mano; pruebas de fuerza de otros grupos o cargas submáximas con técnica y supervisión, según seguridad y propósito.', limit:'La prensión no representa toda la fuerza corporal. Una 1RM no es la primera opción automática en una persona sin experiencia; requiere preparación, protocolo y condiciones apropiadas.', link:'Orienta cargas, selección de ejercicios, volumen y progresión del trabajo de fuerza.'},
+      {id:'flex', title:'Flexibilidad', short:'Flexibilidad', icon:'flex', subtitle:'El rango de movimiento importa.', definition:'Capacidad de movimiento en una articulación o conjunto de articulaciones, influida por tejidos y condiciones específicas.', test:'Goniometría del rango articular; sit-and-reach como prueba de campo con alcance y limitaciones específicos. Registrar lado, postura, dolor y protocolo.', limit:'Una sola prueba no resume todas las articulaciones. El dolor no es una meta del estiramiento: exige interpretar y adaptar la evaluación.', link:'Orienta tipo de ejercicios de movilidad o estiramiento, rangos tolerados y progresión.'}
+    ];
+    const FITT = [
+      {id:'F',letter:'F',name:'Frecuencia',meaning:'Cuántos días o sesiones por semana.'},
+      {id:'I',letter:'I',name:'Intensidad',meaning:'Qué tan exigente es el esfuerzo.'},
+      {id:'T1',letter:'T',name:'Tiempo',meaning:'Cuánto dura cada sesión o esfuerzo.'},
+      {id:'T2',letter:'T',name:'Tipo',meaning:'Qué modalidad de ejercicio se realiza.'},
+      {id:'V',letter:'V',name:'Volumen',meaning:'Cantidad total de ejercicio acumulado.'},
+      {id:'P',letter:'P',name:'Progresión',meaning:'Cómo se ajusta la dosis a lo largo del tiempo.'}
+    ];
+    function atlasCard(d) { return `<article class="atlas-item"><h3>${icon(d.icon)} ${d.title}</h3><p><strong>Qué evalúa.</strong> ${d.definition}</p><p><strong>Ejemplos.</strong> ${d.test}</p><p><strong>Qué no debes concluir.</strong> ${d.limit}</p><p><strong>Puente con FITT-VP.</strong> ${d.link}</p></article>`; }
+    function openAtlas(domain) {
+      const ordered=domain?[...DOMAINS.filter(d=>d.id===domain),...DOMAINS.filter(d=>d.id!==domain)]:DOMAINS;
+      showModal('Fichas de consulta',`<p class="muted">Consulta libre durante el juego. Lo importante no es memorizar una prueba, sino entender su utilidad y sus límites.</p>${ordered.map(atlasCard).join('')}<article class="atlas-item"><h3>Otros componentes</h3><p>Resistencia muscular, equilibrio, coordinación, potencia y desempeño funcional pueden añadirse según la persona. Estos cuatro núcleos no agotan toda la evaluación de la condición física.</p><p>Antes de aplicar cualquier prueba: cribado, consentimiento, protocolo válido, preparación, equipo apropiado y criterios de seguridad. La indicación de valoración médica depende del caso.</p></article><article class="atlas-item"><h3>FITT-VP en seis preguntas</h3>${FITT.map(f=>`<p><strong>${f.name}:</strong> ${f.meaning}</p>`).join('')}<p>Volumen: cantidad total acumulada, por ejemplo minutos/semana en ejercicio aeróbico o series × repeticiones y carga en fuerza, según el propósito.</p></article><h3>Fuentes de fundamento</h3><p class="source">AHA (revisión 2024). <a href="https://www.heart.org/en/health-topics/consumer-healthcare/medication-information/how-do-beta-blocker-drugs-affect-exercise" target="_blank" rel="noopener noreferrer">Betabloqueadores y ejercicio</a>: la medicación puede modificar la respuesta de la frecuencia cardiaca; no cambiar medicamentos por cuenta propia.</p><p class="source">ACSM. <a href="https://books.google.com/books/about/ACSM_s_Health_Related_Physical_Fitness_A.html?id=ZPo96rd3PpAC" target="_blank" rel="noopener noreferrer">Health-Related Physical Fitness Assessment Manual, 4.ª ed. (2013)</a>. Distingue composición corporal, fuerza, resistencia muscular, flexibilidad y capacidad cardiorrespiratoria.</p><p class="source">Garber et al. <a href="https://pubmed.ncbi.nlm.nih.gov/21694556/" target="_blank" rel="noopener noreferrer">ACSM Position Stand: Quantity and Quality of Exercise… (2011)</a>. DOI: 10.1249/MSS.0b013e318213fefb. Fundamento de individualización y de la estructura de prescripción; no se presenta como la última edición de una guía.</p><p class="tiny muted">Son fuentes de fundamento general, no protocolos completos de administración de cada prueba. La clase debe complementarse con manuales vigentes y criterios profesionales. Solo los enlaces a fuentes requieren conexión a internet.</p>`);
+    }
+
+// Banco curado de escenarios ficticios. Los datos no son normas ni diagnósticos.
+const LEVELS = [
+  {id:1,name:'Fundamentos',role:'Explorador',difficulty:'Básica',points:10,description:'Reconoce la capacidad y selecciona una prueba pertinente.',next:'Ahora interpretarás resultados: una cifra aislada puede ocultar técnica, medicación o condiciones distintas.'},
+  {id:2,name:'Interpretación',role:'Analista',difficulty:'Intermedia',points:20,description:'Interpreta resultados con factores de confusión y límites de medición.',next:'Ahora integrarás varios hallazgos a la vez. Habrá más de una acción correcta y deberás conectar la evaluación con FITT-VP.'},
+  {id:3,name:'Integración',role:'Integrador',difficulty:'Avanzada',points:30,description:'Integra seguridad, contexto y hallazgos con FITT-VP. Selecciona todas las acciones pertinentes.',next:''}
+];
+function caseDef(id,level,domain,profile,title,scenario,options,correct,explanation,key,bridge) {
+  return {id,level,domain,profile:{name:profile[0],age:profile[1],context:profile[2],goal:profile[3]},title,scenario,
+    kind:level===3?'multi':'single',options:options.map(([id,text,why])=>({id,text,why})),correct,explanation,key,bridge,
+    icon:DOMAINS.find(d=>d.id===domain).icon};
+}
+const CASES = [
+  caseDef('l1-cardio-marina',1,'cardio',['Marina',42,'Trabajo administrativo; poca actividad habitual.','Subir escaleras con menos esfuerzo.'],
+    '¿Qué prueba elegirías para explorar su capacidad funcional?',
+    'Tras completar el cribado, el profesional considera apropiada una prueba de campo. Marina no corre habitualmente. Hay un recorrido seguro, cronómetro y personal capacitado.',[
+      ['walk','Caminata de 6 minutos estandarizada, con distancia, respuesta al esfuerzo y síntomas.','Permite observar capacidad funcional y tolerancia al esfuerzo en este contexto.'],
+      ['sprint','Sprint máximo de 100 metros sin preparación.','Prioriza velocidad y no corresponde al objetivo funcional propuesto.'],
+      ['rest','Solo registrar frecuencia cardiaca en reposo.','Es información de contexto, no una evaluación suficiente de capacidad de esfuerzo.'],
+      ['reach','Medir alcance del tronco.','Explora aspectos de flexibilidad, no capacidad cardiorrespiratoria.']
+    ],['walk'],'La prueba debe ajustarse a objetivo, salud, población y recursos. La caminata informa capacidad funcional; no mide directamente VO₂máx.','Una prueba pertinente es mejor que la más exigente.','El resultado y la tolerancia orientan intensidad y tiempo del ejercicio aeróbico.'),
+  caseDef('l1-cardio-diego',1,'cardio',['Diego',29,'Ciclista recreativo; sin síntomas tras el cribado.','Conocer su respuesta a un esfuerzo aeróbico controlado.'],
+    '¿Qué opción aporta información pertinente sobre el esfuerzo aeróbico?',
+    'El laboratorio dispone de cicloergómetro, supervisión y un protocolo submáximo validado que resulta apropiado para Diego. No se busca evaluar un sprint ni la fuerza máxima.',[
+      ['cycle','Aplicar el protocolo submáximo en cicloergómetro y registrar carga, frecuencia cardiaca, esfuerzo percibido y síntomas.','Combina una tarea aeróbica controlada con respuesta fisiológica y tolerancia.'],
+      ['hand','Medir solo fuerza de prensión.','La prensión mide una capacidad muscular local, no el desempeño aeróbico.'],
+      ['waist','Registrar solo la cintura.','Aporta antropometría, pero no respuesta al esfuerzo.'],
+      ['race','Competir hasta el agotamiento sin protocolo.','La exigencia sin estandarización no responde de forma adecuada al objetivo.']
+    ],['cycle'],'La modalidad debe corresponder al propósito y a la persona. Incluso una persona activa necesita cribado y un procedimiento apropiado.','Ser activo no vuelve innecesarios el protocolo y el cribado.','La respuesta al esfuerzo ayuda a individualizar intensidad y progresión; una ecuación de estimación debe ser válida para el protocolo.'),
+  caseDef('l1-body-lucia',1,'body',['Lucía',35,'Quiere retomar hábitos saludables; evaluación inicial.','Conocer su composición más allá del peso.'],
+    '¿Qué evaluación informa más que la balanza?',
+    'Hay balanza, tallímetro, cinta métrica y bioimpedancia con personal entrenado y protocolo adecuado. Lucía pregunta si basta con conocer sus kilogramos.',[
+      ['estimate','Antropometría más estimación de composición mediante bioimpedancia estandarizada, reconociendo sus límites.','Agrega información sobre componentes, con método y condiciones explícitos.'],
+      ['bmi','Registrar el IMC como si fuera el porcentaje de grasa.','El IMC es una relación peso-talla; no equivale a porcentaje de grasa.'],
+      ['photo','Clasificar grasa y músculo por una foto.','La apariencia no reemplaza una evaluación válida y respetuosa.'],
+      ['weight','Asumir que un mismo peso implica idéntica composición.','El mismo peso puede corresponder a proporciones distintas de tejidos.']
+    ],['estimate'],'Peso, talla y cintura aportan contexto. Un método de estimación apropiado permite explorar componentes sin confundir IMC con grasa corporal.','Peso, IMC y composición no son sinónimos.','La composición apoya objetivos y seguimiento, pero no decide por sí sola la intensidad.'),
+  caseDef('l1-body-andres',1,'body',['Andrés',32,'Entrena fuerza; consulta por un IMC elevado.','Entender si ese dato describe su grasa corporal.'],
+    '¿Qué harías antes de concluir que tiene mucha grasa?',
+    'Andrés tiene un IMC elevado y experiencia en entrenamiento de fuerza. No dispones aún de una evaluación de sus componentes corporales.',[
+      ['context','Explorar composición con un método apropiado y contextualizar antropometría, salud y hábitos.','El IMC no distingue masa muscular y grasa.'],
+      ['assume','Concluir un porcentaje de grasa exacto solo con el IMC.','Ese porcentaje no se puede deducir directamente del IMC.'],
+      ['ignore','Descartar toda evaluación porque entrena fuerza.','Ser entrenado no elimina la necesidad de interpretar salud y objetivos.'],
+      ['look','Decidir únicamente por su apariencia.','La apariencia no sustituye un método válido.']
+    ],['context'],'El IMC puede servir para cribado, pero no separa grasa de músculo. La interpretación depende del contexto y requiere información complementaria.','No transformes un indicador de cribado en una medición de grasa.','Acordar objetivos necesita más información que una categoría de IMC.'),
+  caseDef('l1-strength-elena',1,'strength',['Elena',51,'Trabajo manual; evaluación sin dolor actual.','Obtener un dato inicial de fuerza de la mano.'],
+    '¿Qué prueba corresponde a fuerza de prensión?',
+    'Tras el cribado, se considera apropiado evaluar la mano. Hay un dinamómetro de prensión y un protocolo estandarizado.',[
+      ['grip','Dinamometría de prensión con posición, intentos y lado registrados.','Es una prueba específica de fuerza de la mano.'],
+      ['pushups','Contar flexiones hasta el agotamiento.','Se orienta a resistencia muscular en otra tarea, no a prensión.'],
+      ['walk','Usar la distancia caminada.','No evalúa la fuerza específica de la mano.'],
+      ['squat','Probar inmediatamente una sentadilla máxima sin preparación.','No corresponde al objetivo de la mano y omite familiarización.']
+    ],['grip'],'Define la capacidad y el grupo muscular antes de elegir la prueba. La dinamometría informa fuerza de prensión, no toda la fuerza corporal.','Especificidad: prueba, capacidad y objetivo deben coincidir.','Un dato local no permite asignar cargas de entrenamiento a todos los músculos.'),
+  caseDef('l1-strength-santiago',1,'strength',['Santiago',24,'Sin experiencia en entrenamiento con cargas.','Iniciar una evaluación de fuerza de miembros inferiores.'],
+    '¿Qué primera estrategia es más fundamentada?',
+    'El cribado permite continuar y hay supervisión. Santiago aún no conoce la técnica de los movimientos. Se desea evaluar fuerza sin imponer una prueba máxima de entrada.',[
+      ['familiarize','Familiarizar la técnica y elegir una prueba de fuerza apropiada al grupo muscular, experiencia y seguridad.','La preparación y la pertinencia preceden a la exigencia de la prueba.'],
+      ['max','Empezar con 1RM sin enseñar la técnica.','Omite preparación y no es la decisión inicial automática para un principiante.'],
+      ['handonly','Usar la prensión para fijar todas las cargas de las piernas.','La fuerza de mano no define directamente la de miembros inferiores.'],
+      ['flexonly','Medir solo flexibilidad y concluir su fuerza.','Son capacidades distintas.']
+    ],['familiarize'],'La selección puede incluir procedimientos submáximos apropiados, con criterios definidos. No hay una prueba universal para todos; una 1RM exige condiciones y preparación.','Primero técnica y prueba pertinente; después exigencia.','La carga inicial requiere evaluación específica y tolerancia, no copiar el peso de otra persona.'),
+  caseDef('l1-flex-paula',1,'flex',['Paula',40,'Muchas horas sentada; rigidez sin dolor actual.','Conocer rango de movimiento de cadera.'],
+    '¿Qué prueba responde al objetivo articular?',
+    'El cribado permite una evaluación de movimiento. Se necesita conocer un rango específico de cadera y se dispone de goniómetro.',[
+      ['goniometry','Goniometría con articulación, movimiento, lado, postura y dolor registrados.','Evalúa el rango articular específico con técnica reproducible.'],
+      ['force','Forzar el movimiento hasta causar dolor.','El dolor no es la meta de la evaluación.'],
+      ['balance','Registrar solo tiempo de apoyo unipodal.','Evalúa principalmente equilibrio, no ese rango articular.'],
+      ['all','Usar un alcance del tronco para describir todas las articulaciones.','Una prueba de campo no resume toda la flexibilidad.']
+    ],['goniometry'],'La flexibilidad es específica de articulaciones y movimientos. Se registra el protocolo y se evita provocar dolor.','Una articulación no representa toda la flexibilidad corporal.','Los rangos tolerados ayudan a escoger tipo de ejercicios y progresión.'),
+  caseDef('l1-flex-omar',1,'flex',['Omar',27,'Practica deporte recreativo; sin síntomas actuales.','Entender qué informa una prueba sit-and-reach.'],
+    '¿Qué afirmación sobre esta prueba es apropiada?',
+    'Se propone una prueba sit-and-reach con protocolo válido. Omar cree que el resultado permitirá describir desde tobillos hasta hombros.',[
+      ['specific','Interpretarla dentro de su alcance específico y evaluar otros rangos cuando el objetivo lo requiera.','No describe todos los movimientos y articulaciones.'],
+      ['universal','Afirmar que un único resultado resume toda la flexibilidad.','Generaliza fuera del alcance de la prueba.'],
+      ['strength','Interpretar los centímetros como fuerza máxima.','Las unidades de alcance no representan fuerza.'],
+      ['pain','Buscar dolor para asegurar que llegó al límite.','El dolor no valida un resultado ni justifica forzar.']
+    ],['specific'],'Las pruebas de campo tienen utilidad y límites. Sus resultados dependen del procedimiento y no sustituyen toda la evaluación articular.','Conocer lo que una prueba no mide también es evaluar bien.','El tipo de trabajo de movilidad debe responder a articulaciones y objetivos concretos.'),
+
+  caseDef('l2-cardio-rosa',2,'cardio',['Rosa',58,'Condición estable; usa un betabloqueador prescrito.','Comprender su pulso durante ejercicio evaluado.'],
+    '¿Cómo interpretas un pulso menor al esperado por edad?',
+    'La evaluación apropiada al caso está supervisada. Rosa usa un betabloqueador y su frecuencia cardiaca no aumenta como predice una fórmula poblacional. No presenta síntomas en la situación descrita.',[
+      ['medication','Considerar el efecto del medicamento y la respuesta individual; integrar esfuerzo percibido, síntomas y medidas pertinentes.','Los betabloqueadores modifican el pulso; una fórmula por edad no describe necesariamente esa respuesta.'],
+      ['push','Aumentar la carga hasta alcanzar a toda costa el pulso predicho.','Puede imponer esfuerzo excesivo por perseguir una cifra no individualizada.'],
+      ['stopmeds','Suspender el medicamento antes de la siguiente prueba.','El evaluador no debe indicar suspender una medicación prescrita por esta comparación.'],
+      ['fit','Concluir que un pulso menor demuestra una capacidad aeróbica superior.','La medicación puede explicar la diferencia; no demuestra esa superioridad.']
+    ],['medication'],'La medicación y el contexto alteran la interpretación de la frecuencia cardiaca. Los objetivos de intensidad deben individualizarse con criterios apropiados; no se cambia medicación por el juego.','Un pulso bajo puede reflejar medicación, no mejor capacidad.','La intensidad no se fija automáticamente con una fórmula de frecuencia máxima por edad.'),
+  caseDef('l2-cardio-victor',2,'cardio',['Víctor',47,'Seguimiento de capacidad funcional.','Saber si una mayor distancia refleja progreso.'],
+    '¿Puedes atribuir el cambio a una mejora real?',
+    'Datos simulados: pasó de 480 a 510 m en dos caminatas de 6 minutos. La primera fue en un recorrido corto con más giros; la segunda, en uno más largo. También cambió el estímulo verbal del evaluador.',[
+      ['compare','Revisar la comparabilidad: recorrido, giros y estímulo pueden afectar la distancia; no atribuir todo el cambio al entrenamiento.','El protocolo no fue equivalente, por lo que hay factores que confunden la comparación.'],
+      ['vo2','Afirmar que ganó exactamente la misma cantidad de VO₂máx que de metros.','Metros y consumo de oxígeno no son medidas equivalentes.'],
+      ['diagnose','Diagnosticar una mejora cardiaca específica solo por la distancia.','Una prueba funcional no demuestra por sí sola ese diagnóstico.'],
+      ['ignore','Ignorar los protocolos porque la duración fue igual.','La duración no controla todos los factores de la prueba.']
+    ],['compare'],'Los cambios de desempeño requieren condiciones comparables y consideración del error y la variabilidad. Los números son simulados y no tienen un punto de corte diagnóstico.','Sin protocolo comparable, no toda diferencia es adaptación.','La progresión se decide por evidencia interpretable y tolerancia, no por una diferencia aislada.'),
+  caseDef('l2-body-natalia',2,'body',['Natalia',33,'Seguimiento mediante bioimpedancia.','Distinguir cambio corporal de cambio en condiciones.'],
+    '¿Qué explicación debes considerar primero?',
+    'Su estimación de grasa por bioimpedancia cambió entre visitas. La segunda se hizo después de entrenar y con distinta hidratación; la primera no. Se usó el mismo equipo.',[
+      ['conditions','Revisar condiciones y repetir según el protocolo apropiado antes de concluir un cambio real.','Hidratación y ejercicio reciente pueden influir en la estimación.'],
+      ['exact','Aceptar toda diferencia como pérdida exacta de grasa.','El método y sus condiciones introducen variabilidad.'],
+      ['same','Asumir comparabilidad solo por usar el mismo equipo.','El equipo no elimina el efecto de condiciones diferentes.'],
+      ['dose','Aumentar intensidad únicamente por ese porcentaje.','La dosis necesita integrar salud, capacidad y respuesta al esfuerzo.']
+    ],['conditions'],'La estandarización no se limita al equipo. Registra y controla las condiciones pertinentes del método y evita interpretar cambios pequeños sin contexto.','El resultado puede cambiar sin que cambie el tejido en la misma magnitud.','La composición es un indicador de seguimiento, no un interruptor automático de intensidad.'),
+  caseDef('l2-body-felipe',2,'body',['Felipe',45,'Seguimiento de hábitos y ejercicio.','Entender cambios con peso estable.'],
+    '¿Qué puedes concluir con estos datos?',
+    'Su peso no cambió, pero la cintura medida con el mismo procedimiento es menor. No tienes una evaluación directa o estimación apropiada de masa grasa y masa libre de grasa para ambas visitas.',[
+      ['limited','Reconocer un cambio antropométrico y la posibilidad de cambios corporales, sin asignar cantidades exactas de grasa o músculo.','La cintura aporta información, pero no cuantifica por sí sola todos los componentes.'],
+      ['nothing','Concluir que no hubo ningún cambio porque el peso es igual.','El peso estable puede coexistir con cambios en otros indicadores.'],
+      ['muscle','Afirmar que ganó exactamente la misma masa de músculo que perdió de grasa.','No hay datos suficientes para cuantificar esos componentes.'],
+      ['vo2','Concluir que mejoró su VO₂máx por el cambio de cintura.','La cintura no mide el consumo máximo de oxígeno.']
+    ],['limited'],'El seguimiento exige distinguir lo observado de lo inferido. Peso y cintura son útiles, pero no describen con precisión todos los tejidos ni todas las capacidades.','Dato observado no equivale a conclusión ilimitada.','El plan se reevalúa con varios indicadores y metas acordadas, no solo con la balanza.'),
+  caseDef('l2-strength-beatriz',2,'strength',['Beatriz',62,'Seguimiento de fuerza de mano.','Interpretar una diferencia entre visitas.'],
+    '¿La diferencia demuestra una ganancia de fuerza?',
+    'Datos simulados de prensión: 28 kg y luego 32 kg. En la segunda visita cambiaron la mano evaluada y la posición del codo. No se registró el mismo protocolo.',[
+      ['protocol','No atribuir toda la diferencia al entrenamiento; revisar lado, posición y protocolo antes de comparar.','La mano y la postura pueden afectar el resultado de prensión.'],
+      ['allbody','Concluir que toda su fuerza corporal aumentó en la misma proporción.','Una prueba local no describe todos los grupos musculares.'],
+      ['load','Usar 32 kg directamente como carga de cualquier ejercicio.','El resultado de un dinamómetro no se traslada a toda máquina o movimiento.'],
+      ['diagnose','Diagnosticar pérdida o ganancia exacta de músculo con esas cifras.','La fuerza no mide directamente masa muscular y el protocolo cambió.']
+    ],['protocol'],'Para comparar fuerza se necesitan pruebas equivalentes: grupo, lado, técnica, posición y procedimiento. Las cifras son ficticias y no corresponden a criterios diagnósticos.','La técnica forma parte del dato, no es un detalle secundario.','La progresión de cargas se basa en evaluación pertinente y ejecución tolerada.'),
+  caseDef('l2-strength-julian',2,'strength',['Julián',30,'Entrena con la misma carga y técnica estandarizada.','Interpretar un aumento de repeticiones.'],
+    '¿Qué capacidad describe principalmente esta mejora?',
+    'En el mismo ejercicio y con la misma carga, Julián pasó de 10 a 15 repeticiones con técnica comparable. No se aplicó una prueba de fuerza máxima ni se midió masa muscular.',[
+      ['endurance','Mejor desempeño de resistencia muscular en esa tarea, sin demostrar por sí solo un aumento exacto de fuerza máxima.','Sostener más repeticiones a una carga dada se relaciona con resistencia muscular.'],
+      ['max','Un aumento exacto del 50 % de fuerza máxima.','La proporción de repeticiones no equivale a proporción de fuerza máxima.'],
+      ['mass','Una ganancia cuantificable de masa muscular.','No se midió ese componente corporal.'],
+      ['cardio','Una medición directa de VO₂máx.','La tarea de repeticiones no es una medición directa de consumo de oxígeno.']
+    ],['endurance'],'La capacidad evaluada depende de la tarea y de cómo se mide. Más repeticiones no equivale automáticamente a mayor fuerza máxima en la misma proporción.','Fuerza y resistencia muscular son relacionadas, pero distintas.','Al programar, distingue la carga de la cantidad de repeticiones y del volumen total.'),
+  caseDef('l2-flex-carolina',2,'flex',['Carolina',38,'Reevaluación de rango de hombro.','Saber si el rango realmente mejoró.'],
+    '¿Qué debes revisar antes de afirmar progreso?',
+    'El segundo ángulo registrado es mayor, pero cambió el evaluador y se permitió una compensación del tronco que antes se controlaba. La postura no fue equivalente.',[
+      ['technique','La técnica, postura y compensaciones: el cambio puede reflejar una medición distinta, no solo mayor rango articular.','Las compensaciones pueden aumentar la lectura sin un cambio equivalente de la articulación.'],
+      ['stretch','Aumentar de inmediato el rango de los estiramientos por el número más alto.','No se ha establecido que la comparación sea válida ni que ese rango sea tolerado.'],
+      ['universal','Concluir que mejoró la flexibilidad de todo su cuerpo.','Un movimiento de hombro no representa todas las articulaciones.'],
+      ['exact','Atribuir toda la diferencia al programa, sin revisar la técnica.','Omite un factor de confusión explícito.']
+    ],['technique'],'Controlar compensaciones y estandarizar posiciones mejora la interpretación de la goniometría. El cambio de evaluador también exige considerar variabilidad y procedimiento.','Más grados no siempre significa más movilidad real de esa articulación.','La progresión del rango necesita tolerancia y mediciones interpretables.'),
+  caseDef('l2-flex-ricardo',2,'flex',['Ricardo',54,'Movimiento de hombro limitado por dolor.','Entender qué significa el rango observado.'],
+    '¿Qué interpretación es más prudente?',
+    'La evaluación registra un rango menor en el hombro que duele. La maniobra se detuvo al aparecer dolor. No hay todavía una valoración completa de la causa.',[
+      ['context','El rango observado está influido por dolor y contexto; requiere interpretación clínica, no atribuirlo solo a falta de flexibilidad.','El dolor puede limitar la prueba y no permite deducir una causa única.'],
+      ['diagnose','Diagnosticar una lesión específica solo por ese ángulo.','Un ángulo y dolor no bastan para ese diagnóstico.'],
+      ['force','Repetir forzando para eliminar el efecto del dolor.','Forzar no corrige la interpretación y puede ser inapropiado.'],
+      ['ignore','Omitir el dolor del registro porque solo importa el ángulo.','El dolor es relevante para interpretar y adaptar.']
+    ],['context'],'Se distingue el dato del rango de la causa del límite. Registrar síntomas, técnica y antecedentes permite orientar una evaluación apropiada sin diagnosticar por una sola cifra.','El dolor cambia la interpretación, no debe borrarse del expediente.','El tipo y la progresión de movilidad deben responder a tolerancia y valoración del caso.'),
+
+  caseDef('l3-cardio-esteban',3,'cardio',['Esteban',57,'Quiere iniciar ejercicio; reporta presión torácica reciente con esfuerzo.','Conocer cómo proceder antes de las pruebas.'],
+    '¿Qué acciones integrarías antes de continuar?',
+    'Durante el cribado cuenta episodios recientes de presión torácica al subir escaleras. Ahora no tiene dolor. Todavía no se han realizado pruebas. Selecciona todas las acciones pertinentes.',[
+      ['defer','Posponer las pruebas de esfuerzo y la prescripción exigente hasta la valoración clínica apropiada.','Los síntomas con esfuerzo requieren evaluación antes de imponer nuevas exigencias.'],
+      ['document','Documentar síntomas, circunstancias, antecedentes y medicación relevante.','Es información esencial para una valoración y coordinación adecuadas.'],
+      ['clinical','Gestionar valoración clínica; si aparecen síntomas actuales de alarma, priorizar atención urgente.','La respuesta depende de la situación, con seguridad como prioridad.'],
+      ['max','Aplicar una prueba máxima para averiguar si el síntoma es importante.','No debe provocarse esfuerzo máximo para resolver este hallazgo sin evaluación apropiada.'],
+      ['age','Asignar intensidad solo con una fórmula por edad.','Una fórmula no resuelve los síntomas ni sustituye evaluación.']
+    ],['defer','document','clinical'],'En este caso, seguridad precede a las cuatro pruebas. No se establece un diagnóstico. La valoración médica no es universal para todos: aquí existe un síntoma concreto que la hace pertinente.','A veces la mejor decisión de evaluación es no iniciar todavía una prueba de esfuerzo.','La intensidad y progresión no se definen antes de aclarar un hallazgo de seguridad.'),
+  caseDef('l3-cardio-adriana',3,'cardio',['Adriana',60,'Condición estable y betabloqueador; evaluación individual apropiada.','Acordar una dosis aeróbica viable y monitorizada.'],
+    '¿Qué información y decisiones necesitas integrar?',
+    'La valoración permite ejercicio apropiado al caso. El pulso está modificado por medicación; la tolerancia fue registrada. Adriana dispone de tres días y prefiere caminar. Aún no hay un plan de seguimiento.',[
+      ['intensity','Individualizar la intensidad considerando respuesta, medicación, esfuerzo percibido y síntomas; no perseguir una cifra por edad.','La medicación puede alterar la relación entre carga y pulso.'],
+      ['feasible','Acordar frecuencia, tiempo y tipo compatibles con objetivos, disponibilidad y tolerancia.','La dosis debe ser viable y apropiada para la persona.'],
+      ['follow','Definir seguimiento y criterios para ajustar volumen y progresión según respuesta.','Sin reevaluación, no se justifica cómo cambiar la dosis.'],
+      ['stopmeds','Suspender el betabloqueador para usar una fórmula estándar.','No se cambia medicación prescrita desde este juego.'],
+      ['generic','Copiar la intensidad y progresión de una persona sin medicación.','La misma fórmula no garantiza una dosis individualizada.']
+    ],['intensity','feasible','follow'],'La evaluación informa FITT-VP y se integra con la viabilidad y las respuestas. Las decisiones clínicas y la medicación se coordinan con el profesional responsable; el juego no fija una dosis concreta.','Individualizar significa integrar salud, respuesta y vida cotidiana.','Frecuencia, Intensidad, Tiempo, Tipo, Volumen y Progresión trabajan como un conjunto.'),
+  caseDef('l3-body-teresa',3,'body',['Teresa',72,'Perdió peso tras cambios alimentarios; ahora refiere menos fuerza y fatiga.','Mejorar salud y función, no solo bajar kilogramos.'],
+    '¿Qué plan de evaluación es más completo?',
+    'Teresa celebra un peso menor, pero informa dificultad nueva en tareas cotidianas. No tienes aún composición, evaluación muscular, tolerancia ni una valoración de la fatiga. Selecciona todas las acciones pertinentes.',[
+      ['muscle','Evaluar composición con un método apropiado e interpretar junto con fuerza y desempeño funcional.','Menor peso no informa qué tejidos cambiaron ni cómo funciona la persona.'],
+      ['health','Explorar antecedentes, síntomas, medicación y necesidad de valoración clínica o nutricional pertinente.','La fatiga y la pérdida de función necesitan contexto y valoración apropiada.'],
+      ['fitness','Completar los demás núcleos con pruebas seguras y pertinentes, considerando tolerancia y objetivos.','La composición no reemplaza capacidad cardiorrespiratoria, fuerza y flexibilidad.'],
+      ['goals','Revisar metas y seguimiento para priorizar función y ajustar FITT-VP según resultados y respuesta.','El plan debe responder al objetivo y a la evolución, no solo a un peso meta.'],
+      ['fatloss','Aumentar la exigencia para perder más peso sin explorar la fatiga.','Ignora señales relevantes y asume que todo descenso es beneficioso.']
+    ],['muscle','health','fitness','goals'],'El descenso de peso no se interpreta automáticamente como mejora de todos los componentes. Función, síntomas, tejidos y contexto necesitan integrarse. No se diagnostica sarcopenia ni otra condición desde este caso.','Un objetivo de salud no puede reducirse al número de la balanza.','El tipo, la intensidad y el volumen deben apoyar función y salud con seguimiento apropiado.'),
+  caseDef('l3-body-daniela',3,'body',['Daniela',26,'Deportista recreativa; composición estimada en condiciones cambiantes.','Ajustar objetivos sin perder rendimiento.'],
+    '¿Qué decisiones sí están sustentadas por la evaluación?',
+    'Dos bioimpedancias se hicieron con hidratación distinta. También faltan resultados de capacidad aeróbica y fuerza, y no se acordaron metas compatibles con su actividad. Quiere una rutina nueva hoy.',[
+      ['repeat','Revisar comparabilidad y obtener una estimación interpretable antes de atribuir cambios a grasa o músculo.','Las condiciones cambiantes limitan las conclusiones del seguimiento.'],
+      ['integrate','Completar la evaluación pertinente y acordar metas; no asignar la dosis solo por una estimación de grasa.','FITT-VP necesita condición física, salud, respuesta y contexto.'],
+      ['extreme','Fijar una pérdida rápida de peso por la cifra aislada.','No hay base para ese objetivo ni contexto suficiente.'],
+      ['universal','Copiar un volumen de entrenamiento estándar sin revisar tolerancia.','El volumen debe individualizarse.'],
+      ['exact','Aceptar la diferencia como cambio exacto de tejido porque el equipo es el mismo.','Las condiciones también importan.']
+    ],['repeat','integrate'],'Primero se revisa la calidad del dato y se completa lo que falta. No se requiere un valor específico de grasa para cada persona ni se impone un objetivo por apariencia.','Una cifra incierta no fundamenta una dosis precisa.','La composición puede orientar metas; no decide sola intensidad, volumen o progresión.'),
+  caseDef('l3-strength-gabriel',3,'strength',['Gabriel',66,'Sin entrenamiento con cargas; quiere mejorar tareas cotidianas.','Ganar función y fuerza de miembros inferiores.'],
+    '¿Qué acciones prepararían una prescripción de fuerza?',
+    'Solo se midió prensión. Gabriel quiere subir escaleras y levantarse con más facilidad; reporta molestias ocasionales de rodilla que aún deben explorarse. Selecciona todas las acciones pertinentes.',[
+      ['specific','Explorar síntomas y evaluar los grupos y tareas pertinentes, con técnica y pruebas apropiadas.','La mano no describe toda la fuerza y la molestia debe contextualizarse.'],
+      ['dose','Familiarizar ejercicios y ajustar carga, series y repeticiones a la ejecución y tolerancia evaluadas.','La dosis de fuerza necesita más que el valor de prensión.'],
+      ['review','Planear seguimiento y progresión de carga o volumen según respuesta, sin forzar dolor.','La progresión requiere evidencia de tolerancia y adaptación.'],
+      ['same','Usar el número del dinamómetro como carga de sentadilla.','Un dato local no equivale a la carga de otro movimiento.'],
+      ['max','Hacer una 1RM de entrada sin familiarización ni explorar las molestias.','Omite preparación y contexto relevante.']
+    ],['specific','dose','review'],'La evaluación muscular se ajusta al objetivo y se integra con síntomas y función. No se diagnostica la rodilla ni se asignan kilogramos desde el juego.','Una prueba local no completa una evaluación para todas las tareas.','Tipo, Intensidad, Volumen y Progresión de fuerza dependen de técnica y tolerancia.'),
+  caseDef('l3-strength-valeria',3,'strength',['Valeria',34,'Ha aumentado simultáneamente sesiones, series y cargas.','Mejorar fuerza de forma sostenible.'],
+    '¿Qué revisarías antes de seguir aumentando la dosis?',
+    'Sus registros de fuerza mejoraron en condiciones comparables, pero ahora reporta fatiga persistente y peor recuperación. El plan subió frecuencia, series y carga a la vez. No hay criterios de progresión.',[
+      ['response','Interpretar los resultados junto con fatiga, recuperación y síntomas, explorando si requiere valoración adicional.','Mejorar una prueba no elimina información sobre tolerancia actual.'],
+      ['volume','Revisar frecuencia, intensidad y volumen total, no confundir más trabajo con mejor adaptación.','Varias dimensiones de la dosis cambiaron a la vez.'],
+      ['progress','Definir ajustes graduales y reevaluación según respuesta en vez de aumentar todas las variables automáticamente.','La progresión se fundamenta en tolerancia y objetivos.'],
+      ['ignore','Ignorar la fatiga porque la prueba mejoró.','El rendimiento no es el único indicador relevante.'],
+      ['double','Duplicar de nuevo frecuencia, carga y series para acelerar la adaptación.','No se justifica con una recuperación deteriorada.']
+    ],['response','volume','progress'],'FITT-VP permite distinguir dimensiones de la dosis. Un mejor resultado de fuerza no justifica progresar automáticamente si la respuesta cotidiana se deteriora.','Progresar no siempre significa aumentar todo.','Frecuencia, Intensidad, Volumen y Progresión deben revisarse como variables distintas.'),
+  caseDef('l3-flex-fernando',3,'flex',['Fernando',49,'Trabajo por encima de la cabeza; dolor al elevar un hombro.','Mejorar movimiento tolerado para tareas cotidianas.'],
+    '¿Qué acciones integrarías para evaluar y orientar el plan?',
+    'En la maniobra aparece dolor y se detiene. Hay diferencia entre lados, pero no una valoración completa. Fernando pide estirar más fuerte para igualarlos.',[
+      ['clinical','Registrar dolor, contexto y antecedentes; valorar si necesita evaluación clínica antes de continuar.','El hallazgo requiere interpretación y no un diagnóstico por ángulo.'],
+      ['specific','Usar evaluación específica con técnica y límites tolerados, evitando forzar la maniobra dolorosa.','La seguridad y la pertinencia delimitan el procedimiento.'],
+      ['adapt','Orientar tipo y progresión de movilidad con hallazgos y tolerancia; reevaluar antes de aumentar rangos.','La prescripción no parte de igualar ambos lados a cualquier costo.'],
+      ['force','Empujar más para lograr el mismo ángulo en ambos hombros.','Ignora el dolor y convierte una diferencia en una meta forzada.'],
+      ['diagnose','Diagnosticar una lesión específica solo por la asimetría.','Una diferencia no identifica por sí sola la causa.']
+    ],['clinical','specific','adapt'],'La flexibilidad se interpreta con síntomas, tareas y condiciones de medición. La meta es un plan pertinente y tolerado, no una cifra simétrica a toda costa.','El rango útil se interpreta con función y tolerancia.','El Tipo y la Progresión deben responder al caso; el tiempo de estiramiento no se impone ignorando dolor.'),
+  caseDef('l3-flex-isabel',3,'flex',['Isabel',70,'Refiere rigidez y dos caídas recientes.','Moverse con más confianza en su vida diaria.'],
+    '¿Qué sumarías a los cuatro núcleos?',
+    'Aún no se conocen las circunstancias de las caídas. Isabel quiere una rutina de estiramientos, pero faltan equilibrio, marcha, antecedentes y respuesta funcional. Selecciona todas las acciones pertinentes.',[
+      ['falls','Explorar circunstancias, síntomas, medicación y necesidad de valoración clínica de las caídas.','Las caídas tienen posibles causas que no se resuelven con una prueba de flexibilidad.'],
+      ['balance','Agregar equilibrio, marcha y desempeño funcional con pruebas apropiadas al contexto.','Son dimensiones relevantes para su objetivo, además de los cuatro núcleos.'],
+      ['range','Evaluar rangos articulares específicos, sin dolor, sin usar una sola prueba para todo el cuerpo.','La flexibilidad requiere especificidad y técnica.'],
+      ['integrate','Integrar hallazgos, preferencias, recursos y seguimiento para escoger tipos de ejercicio y progresión.','El plan no se limita a estirar si otros componentes son pertinentes.'],
+      ['stretchonly','Prescribir solo estiramientos y omitir la exploración de las caídas.','Reduce el problema a rigidez sin fundamento.']
+    ],['falls','balance','range','integrate'],'Los cuatro núcleos son la base de esta clase, no una lista exhaustiva. Se añaden dimensiones y valoración de salud según el caso; el juego no identifica la causa de las caídas.','La complejidad real exige ampliar la evaluación, no solo acumular pruebas.','El Tipo de ejercicio y su Progresión se eligen con función, seguridad y objetivos.'),
+];
+
+const icon = name => `<svg class="icon" aria-hidden="true"><use href="#i-${name}"/></svg>`;
+const $ = id => document.getElementById(id);
+const esc = text => String(text).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const CASES_PER_LEVEL = 4;
+const TOTAL_CASES = 12;
+const MAX_SCORE = 240;
+const state = {screen:'home',index:0,deck:[],previousIds:[],selected:new Set(),answered:false,records:[],optionOrder:[],best:0,streak:0,bestStreak:0};
+try { const stored=Number(localStorage.getItem('fittlab-v2-best'));state.best=Number.isFinite(stored)?Math.max(0,Math.min(MAX_SCORE,stored)):0; } catch (_) { /* El almacenamiento no es obligatorio. */ }
+const shuffle = list => {
+  const copy=[...list];
+  for(let i=copy.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[copy[i],copy[j]]=[copy[j],copy[i]];}
+  return copy;
+};
+const score = () => state.records.reduce((sum,r)=>sum+r.points,0);
+const currentCase = () => state.deck[state.index];
+const footer = () => `<footer><span>FITT / LAB · Cada caso te exige un poco más.</span><span>Casos ficticios · Sin datos personales · Sin internet</span></footer>`;
+const strip = () => `<div class="fitt-strip">${FITT.map(f=>`<div><strong>${f.letter}</strong><span>${f.name}</span></div>`).join('')}</div>`;
+function focusHeading() {
+  const heading=$('main').querySelector('h1');
+  if(heading){heading.tabIndex=-1;heading.focus({preventScroll:true});}
+  window.scrollTo({top:0,behavior:'instant'});
+}
+function makeDeck(previousIds=[]) {
+  const previous=new Set(previousIds);
+  return LEVELS.flatMap(level=>shuffle(DOMAINS.map(domain=>{
+    const pool=CASES.filter(c=>c.level===level.id&&c.domain===domain.id);
+    if(!pool.length)throw new Error(`Falta un caso para nivel ${level.id}, ${domain.id}`);
+    const alternatives=pool.filter(c=>!previous.has(c.id));
+    const eligible=alternatives.length?alternatives:pool;
+    return eligible[Math.floor(Math.random()*eligible.length)];
+  })));
+}
+function renderHome() {
+  state.screen='home';
+  $('main').innerHTML=`<section class="hero fade" aria-labelledby="home-title">
+    <div><div class="hero-tag eyebrow"><span class="dot"></span> Casos aleatorios · Dificultad creciente</div>
+    <h1 id="home-title">Primero evalúa.<br><span class="serif">Después prescribe.</span></h1>
+    <p class="lead">Cada persona cambia la decisión. Resuelve casos que salen al azar y asciende del reconocimiento de pruebas a la integración de hallazgos con FITT-VP.</p>
+    <div class="hero-actions"><button class="btn" id="start">Iniciar partida ${icon('arrow')}</button><button class="text-btn" id="how">¿Cómo se juega?</button></div>
+    <div class="meta-line"><span>${icon('clock')} 10–15 min sugeridos</span><span>${icon('check')} 12 casos por partida</span><span>3 niveles · 24 casos disponibles</span></div>
+    ${state.best?`<p class="tiny muted" style="margin-top:14px">Tu mejor resultado en este navegador: <strong>${state.best}/${MAX_SCORE}</strong></p>`:''}</div>
+    <article class="case-preview campaign-preview" aria-label="Niveles de dificultad"><div class="case-top"><span class="eyebrow">Tu campaña de aprendizaje</span><span class="pill">24 casos ficticios</span></div>
+    <h2 class="serif">No es memorizar.<br>Es decidir mejor.</h2>
+    <div class="preview-levels">${LEVELS.map(l=>`<div><span class="preview-number">0${l.id}</span><div><strong>${l.name}</strong><p>${l.description}</p></div><span class="preview-xp">${l.points} pts</span></div>`).join('')}</div>
+    <div class="case-bottom">${icon('reset')}<span>Nuevas variantes y orden aleatorio al volver a jugar. Cada nivel incluye los cuatro núcleos.</span></div></article>
+    </section><section aria-labelledby="pillars-title"><div class="section-head"><h2 id="pillars-title">Cuatro núcleos. Distintas personas.</h2><span class="tiny muted">Tus fichas están disponibles durante la partida.</span></div>
+    <div class="pillars">${DOMAINS.map((d,i)=>`<button class="pillar" data-atlas="${d.id}"><div class="pillar-top">${icon(d.icon)}<span class="pillar-num">0${i+1} ↗</span></div><h3>${d.title}</h3><p>${d.subtitle}</p></button>`).join('')}</div>
+    <div class="bottom-note">${icon('shield')}<span>El cribado previo y el contexto importan. Los cuatro núcleos no agotan toda la evaluación. Este juego es de razonamiento: no debes realizar las pruebas físicas para jugar.</span></div></section>${footer()}`;
+  $('start').onclick=start;
+  $('how').onclick=()=>openGuide('how');
+  document.querySelectorAll('[data-atlas]').forEach(b=>b.onclick=()=>openAtlas(b.dataset.atlas));
+}
+function start() {
+  if(state.deck.length)state.previousIds=state.deck.map(c=>c.id);
+  state.deck=makeDeck(state.previousIds);
+  state.optionOrder=state.deck.map(c=>shuffle(c.options));
+  state.screen='game';state.index=0;state.records=[];state.streak=0;state.bestStreak=0;
+  resetDecision();renderQuestion();focusHeading();
+}
+function resetDecision(){state.selected=new Set();state.answered=false;}
+function domainName(id){return DOMAINS.find(d=>d.id===id).short;}
+function renderRail(c) {
+  return `<aside class="rail" aria-label="Niveles y expediente"><p class="eyebrow rail-label">Tu ascenso</p>
+    <ol class="stage-list">${LEVELS.map(l=>`<li class="${c.level===l.id?'active':c.level>l.id?'done':''}" ${c.level===l.id?'aria-current="step"':''}><span class="stage-circle">${c.level>l.id?'✓':l.id}</span><div><strong>${l.name}</strong><small>${l.difficulty} · ${l.points} puntos/caso</small></div></li>`).join('')}</ol>
+    <article class="rail-case"><span class="eyebrow muted">Caso ${String(state.index+1).padStart(2,'0')} · Nuevo expediente</span><h3>${esc(c.profile.name)} · ${c.profile.age} años</h3><p>${esc(c.profile.context)}</p><dl><dt>Objetivo de la persona</dt><dd>${esc(c.profile.goal)}</dd><dt>Tu desafío</dt><dd>${LEVELS[c.level-1].description}</dd></dl></article>
+    <div class="mini-badges" aria-label="Núcleos recorridos en el nivel">${DOMAINS.map(d=>{const done=state.records.some(r=>r.level===c.level&&r.domain===d.id);return `<span class="mini-badge ${done?'completed':''}" title="${d.title}: ${done?'revisado':'pendiente'}" aria-label="${d.title}: ${done?'revisado':'pendiente'}">${icon(d.icon)}</span>`;}).join('')}</div>
+    <button class="text-btn tiny rail-reset" id="rail-reset">${icon('reset')} Volver al inicio</button></aside>`;
+}
+function renderQuestion() {
+  const c=currentCase();const level=LEVELS[c.level-1];const inLevel=state.index%CASES_PER_LEVEL+1;
+  $('main').innerHTML=`<div class="game-layout fade">${renderRail(c)}<section class="question-panel" aria-label="Caso actual">
+    <div class="progress-head"><p>Caso <strong>${state.index+1}/${TOTAL_CASES}</strong> · Nivel ${c.level}/3</p><div class="game-counters"><span class="streak">Racha ${state.streak}</span><span class="score">${score()} / ${MAX_SCORE} pts</span></div></div>
+    <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="${TOTAL_CASES}" aria-valuenow="${state.records.length}" aria-label="Casos revisados"><div class="progress-fill" style="width:${state.records.length/TOTAL_CASES*100}%"></div></div>
+    <div class="level-banner level-${c.level}"><div><span class="eyebrow">${level.role} · Dificultad ${level.difficulty.toLowerCase()}</span><strong>${level.name}</strong></div><span class="pill">${inLevel}/4 · +${level.points} pts</span></div>
+    <article class="question-card"><div class="q-label eyebrow">${icon(c.icon)} ${domainName(c.domain)} · Caso al azar</div>
+    <div class="case-profile"><span class="profile-initial" aria-hidden="true">${esc(c.profile.name.charAt(0))}</span><div><strong>${esc(c.profile.name)}, ${c.profile.age} años</strong><p>${esc(c.profile.context)}</p></div></div>
+    <p class="case-goal"><strong>Su objetivo:</strong> ${esc(c.profile.goal)}</p><h1>${c.title}</h1><div class="scenario">${c.scenario}</div>
+    <p class="instruction">${c.kind==='multi'?'Dificultad avanzada: selecciona todas las acciones pertinentes. El conjunto completo debe ser correcto.':'Elige la decisión más fundamentada. Puedes cambiarla antes de confirmar.'}</p>
+    <div class="options" role="group" aria-label="Opciones de respuesta">${state.optionOrder[state.index].map((o,i)=>`<button class="option" type="button" data-option="${o.id}" aria-pressed="false"><span class="option-letter" aria-hidden="true">${c.kind==='multi'?'□':String.fromCharCode(65+i)}</span><span>${o.text}</span></button>`).join('')}</div>
+    <div id="feedback-area"></div><div class="decision-bar"><p id="decision-status">${c.kind==='multi'?'Ninguna acción seleccionada':'Piensa en el objetivo, el contexto y la seguridad.'}</p><button class="btn" id="confirm" disabled>Confirmar decisión ${icon('check')}</button></div></article>
+    <p class="tiny muted" style="margin-top:15px">Puedes consultar las fichas. Los errores enseñan: no hay vidas ni límite de tiempo.</p></section></div>${footer()}`;
+  $('rail-reset').onclick=confirmReset;
+  document.querySelectorAll('[data-option]').forEach(b=>b.onclick=()=>selectOption(b.dataset.option));
+  $('confirm').onclick=submitAnswer;
+}
+function selectOption(id) {
+  if(state.screen!=='game'||state.answered)return;
+  const c=currentCase();if(!c.options.some(o=>o.id===id))return;
+  if(c.kind==='multi'){state.selected.has(id)?state.selected.delete(id):state.selected.add(id);}else{state.selected=new Set([id]);}
+  document.querySelectorAll('[data-option]').forEach(b=>{
+    const chosen=state.selected.has(b.dataset.option);b.classList.toggle('selected',chosen);b.setAttribute('aria-pressed',String(chosen));
+    if(c.kind==='multi')b.querySelector('.option-letter').textContent=chosen?'✓':'□';
+  });
+  $('confirm').disabled=!state.selected.size;
+  $('decision-status').textContent=c.kind==='multi'?`${state.selected.size} acción${state.selected.size===1?'':'es'} seleccionada${state.selected.size===1?'':'s'}`:'Decisión lista para revisar.';
+}
+function submitAnswer() {
+  if(state.screen!=='game'||state.answered||!state.selected.size)return;
+  const c=currentCase();const level=LEVELS[c.level-1];state.answered=true;
+  const ok=state.selected.size===c.correct.length&&c.correct.every(id=>state.selected.has(id));
+  state.streak=ok?state.streak+1:0;state.bestStreak=Math.max(state.bestStreak,state.streak);
+  state.records.push({id:c.id,domain:c.domain,level:c.level,ok,points:ok?level.points:0,selected:[...state.selected]});
+  document.querySelectorAll('[data-option]').forEach(b=>{
+    b.disabled=true;const right=c.correct.includes(b.dataset.option);const chosen=state.selected.has(b.dataset.option);
+    b.classList.toggle('correct',right);b.classList.toggle('incorrect',chosen&&!right);
+    if(right||chosen)b.insertAdjacentHTML('beforeend',`<span class="option-status">${right?(chosen?'✓ Correcta':c.kind==='multi'?'✓ Faltaba':'✓ Correcta'):'Revisar'}</span>`);
+  });
+  const chosen=c.options.filter(o=>state.selected.has(o.id));
+  const omitted=c.options.filter(o=>c.correct.includes(o.id)&&!state.selected.has(o.id));
+  let detail=c.kind==='single'?`<p><strong>Tu decisión:</strong> ${chosen[0].why}</p>`:
+    [...omitted.map(o=>`<p><strong>Faltó incluir:</strong> ${o.why}</p>`),...chosen.filter(o=>!c.correct.includes(o.id)).map(o=>`<p><strong>No corresponde:</strong> ${o.why}</p>`)].join('');
+  $('feedback-area').innerHTML=`<section class="feedback ${ok?'':'warning'}" id="feedback" role="status" tabindex="-1"><h2>${icon(ok?'check':'info')}${ok?`Decisión fundamentada · +${level.points} puntos`:'Caso revisado · afina el criterio'}</h2>${detail}<p>${c.explanation}</p><p class="key"><strong>Idea clave:</strong> ${c.key}</p><p class="fitt-bridge"><strong>Puente con FITT-VP:</strong> ${c.bridge}</p>${ok&&state.streak>=3?`<p class="combo-message">Racha de ${state.streak} aciertos. ¡Mantén el criterio!</p>`:''}</section>`;
+  $('decision-status').textContent=ok?'Lee la explicación antes de recibir el siguiente caso.':'No suma puntos; la explicación te prepara para el siguiente caso.';
+  const last=state.index===TOTAL_CASES-1;const endLevel=(state.index+1)%CASES_PER_LEVEL===0;
+  $('confirm').innerHTML=`${last?'Ver mi resultado':endLevel?'Cerrar nivel y ascender':'Siguiente caso al azar'} ${icon('arrow')}`;
+  $('confirm').disabled=false;$('confirm').onclick=nextQuestion;
+  document.querySelector('.score').textContent=`${score()} / ${MAX_SCORE} pts`;
+  document.querySelector('.streak').textContent=`Racha ${state.streak}`;
+  document.querySelector('.progress-fill').style.width=`${state.records.length/TOTAL_CASES*100}%`;
+  document.querySelector('[role="progressbar"]').setAttribute('aria-valuenow',String(state.records.length));
+  $('feedback').focus({preventScroll:true});$('feedback').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest'});
+}
+function nextQuestion() {
+  if(state.screen!=='game'||!state.answered)return;
+  if(state.index===TOTAL_CASES-1){renderResults();return;}
+  if((state.index+1)%CASES_PER_LEVEL===0){renderLevelUp();return;}
+  advanceCase();
+}
+function advanceCase() {
+  state.index++;state.screen='game';resetDecision();renderQuestion();focusHeading();
+}
+function renderLevelUp() {
+  state.screen='levelup';const completed=LEVELS[currentCase().level-1];const next=LEVELS[currentCase().level];
+  const records=state.records.filter(r=>r.level===completed.id);const correct=records.filter(r=>r.ok).length;
+  $('main').innerHTML=`<section class="levelup-screen fade"><div class="result-stamp">${icon('award')}</div><div class="eyebrow muted">Nivel ${completed.id} completado · 4 casos revisados</div>
+    <h1>Subes un nivel.<br><span class="serif">Ahora el caso exige más.</span></h1><p class="lead">${completed.next}</p>
+    <div class="levelup-stats"><span><strong>${correct}/4</strong> decisiones correctas</span><span><strong>${records.reduce((s,r)=>s+r.points,0)}/${completed.points*4}</strong> puntos del nivel</span></div>
+    <div class="unlocked-card"><span class="eyebrow">Nivel ${next.id} desbloqueado</span><h2>${next.name}</h2><p>${next.description}</p><span class="pill">${next.difficulty} · ${next.points} puntos por caso</span></div>
+    <p class="tiny muted">Avanzas al revisar los cuatro casos, no solo al acertarlos. Los puntos reflejan las decisiones correctas; el ascenso no certifica dominio clínico.</p>
+    <button class="btn" id="advance-level">Entrar al nivel ${next.id} ${icon('arrow')}</button><button class="text-btn" id="levelup-atlas">${icon('book')} Consultar antes de continuar</button></section>${footer()}`;
+  $('advance-level').onclick=()=>{if(state.screen==='levelup')advanceCase();};$('levelup-atlas').onclick=()=>openAtlas();focusHeading();
+}
+function chosenText(c,r){return c.options.filter(o=>r.selected.includes(o.id)).map(o=>o.text).join(' | ');}
+function rightText(c){return c.options.filter(o=>c.correct.includes(o.id)).map(o=>o.text).join(' | ');}
+function domainStats(id){const records=state.records.filter(r=>r.domain===id);return {correct:records.filter(r=>r.ok).length,total:records.length};}
+function levelStats(id){const records=state.records.filter(r=>r.level===id);return {correct:records.filter(r=>r.ok).length,points:records.reduce((s,r)=>s+r.points,0)};}
+function renderResults() {
+  state.screen='results';const points=score();const correct=state.records.filter(r=>r.ok).length;
+  state.best=Math.max(state.best,points);try{localStorage.setItem('fittlab-v2-best',String(state.best));}catch(_){}
+  const strong=DOMAINS.filter(d=>domainStats(d.id).correct===3);const weak=DOMAINS.filter(d=>domainStats(d.id).correct<3);
+  const headline=correct===TOTAL_CASES?'Tu criterio marca la diferencia.':correct>=9?'Ya integras decisiones complejas.':correct>=6?'Tu criterio va tomando forma.':'Cada caso deja una pista para mejorar.';
+  $('main').innerHTML=`<section class="result-layout fade"><div class="result-top"><div class="result-stamp">${icon('award')}</div><div class="eyebrow muted">Campaña completada · 3 niveles</div><h1>${headline}</h1><p class="lead">Revisaste ${TOTAL_CASES} casos sorteados del banco de ${CASES.length}. Ahora compara cómo cambió tu criterio desde elegir pruebas hasta integrar hallazgos.</p></div>
+    <div class="result-stats"><div><strong>${points}<span> / ${MAX_SCORE}</span></strong><span>Puntos de aprendizaje</span></div><div><strong>${correct}<span> / ${TOTAL_CASES}</span></strong><span>Casos correctos</span></div><div><strong>${state.bestStreak}</strong><span>Mejor racha de aciertos</span></div></div>
+    <div class="level-results">${LEVELS.map(l=>{const s=levelStats(l.id);return `<article class="level-result"><span class="eyebrow">Nivel ${l.id} · ${l.difficulty}</span><h3>${l.name}</h3><p><strong>${s.correct}/4</strong> aciertos · ${s.points}/${l.points*4} pts</p><span class="level-medal">${s.correct===4?'Medalla: pleno de aciertos':s.correct>=2?'Medalla: criterio en desarrollo':'Recorrido completado; refuerza este nivel'}</span></article>`;}).join('')}</div>
+    <div class="section-head"><h2>Tu criterio por núcleo</h2><span class="tiny muted">Un caso de cada núcleo en cada nivel.</span></div><div class="domain-results">${DOMAINS.map(d=>{const s=domainStats(d.id);return `<article class="domain-result">${icon(d.icon)}<div><h3>${d.title}</h3><p>${s.correct===s.total?'Buen criterio en los tres niveles.':'Revisa las decisiones que te costaron más.'}</p></div><strong>${s.correct}/${s.total}</strong></article>`;}).join('')}</div>
+    <article class="summary-box"><h2>Tu mapa de aprendizaje</h2><p><strong>Aciertos sólidos:</strong> ${strong.length?strong.map(d=>d.short).join(', ')+'.':'Ya completaste el recorrido. Usa las explicaciones para afianzar cada núcleo.'}</p><p><strong>Para reforzar:</strong> ${weak.length?weak.map(d=>d.short).join(', ')+'.':'Respondiste correctamente los cuatro núcleos en todos los niveles.'}</p><p><strong>Siguiente paso:</strong> vuelve a jugar: se elegirá la otra variante de cada núcleo y nivel respecto de esta partida y se barajará su orden.</p><p class="tiny muted">Puntos por caso: 10 en Fundamentos, 20 en Interpretación y 30 en Integración. La selección múltiple puntúa solo si el conjunto está completo y sin opciones incorrectas. No es certificación de competencia clínica.</p></article>
+    <article class="summary-box"><span class="eyebrow" style="color:var(--teal)">La conexión con tu clase</span><h2 style="margin-top:12px">Evaluar → interpretar → prescribir → reevaluar</h2><p>No hay una misma respuesta para todas las personas. La calidad del dato, los síntomas, los objetivos y la tolerancia informan una dosis individualizada.</p>${strip()}<p style="margin-top:16px;margin-bottom:0"><strong>Para discutir:</strong> ¿qué caso cambió tu primera intuición? ¿Qué factor de confusión encontraste? ¿Qué hallazgo modificaría la intensidad, el tipo o la progresión?</p></article>
+    <div class="section-head"><h2>Tus ${TOTAL_CASES} casos jugados</h2><span class="tiny muted">La revisión refleja tu partida, no todo el banco.</span></div>
+    ${state.deck.map((c,i)=>{const r=state.records[i];return `<details><summary><span class="review-status">${r.ok?'✓':'Revisar'}</span> · ${i+1}. ${esc(c.profile.name)} · Nivel ${c.level} · ${c.title}</summary><div class="review-content"><p><strong>Contexto:</strong> ${c.scenario}</p><p><strong>Elegiste:</strong> ${esc(chosenText(c,r))}</p><p><strong>Respuesta esperada:</strong> ${esc(rightText(c))}</p><p>${c.explanation}</p><p><strong>Idea clave:</strong> ${c.key}</p><p><strong>FITT-VP:</strong> ${c.bridge}</p></div></details>`;}).join('')}
+    <div class="result-actions"><button class="btn" id="replay">${icon('reset')} Jugar con otros casos</button><button class="btn secondary" id="download-results">${icon('download')} Descargar mi resumen</button><button class="btn secondary" id="back-home">Volver al inicio</button></div><p class="live-notice" id="result-notice" role="status"></p><p class="tiny muted" style="text-align:center">No se envían respuestas al servidor. Las variantes se alternan en esta sesión; no es contenido infinito.</p></section>${footer()}`;
+  $('replay').onclick=start;$('back-home').onclick=()=>{renderHome();focusHeading();};$('download-results').onclick=downloadResults;focusHeading();
+}
+function buildSummary() {
+  return ['FITT LAB — CAMPAÑA DE CASOS ALEATORIOS',`Puntos: ${score()}/${MAX_SCORE} · Aciertos: ${state.records.filter(r=>r.ok).length}/${TOTAL_CASES} · Mejor racha: ${state.bestStreak}`,
+    'Tres niveles revisados. Este resultado no certifica competencia clínica.','',
+    ...LEVELS.map(l=>{const s=levelStats(l.id);return `Nivel ${l.id} ${l.name}: ${s.correct}/4 aciertos; ${s.points}/${l.points*4} puntos`;}),'',
+    ...state.deck.flatMap((c,i)=>{const r=state.records[i];return [`${i+1}. ${c.profile.name}, ${c.profile.age} años · Nivel ${c.level} · ${domainName(c.domain)}`,`Caso: ${c.id}`,`Contexto: ${c.profile.context}`,`Objetivo: ${c.profile.goal}`,`Situación: ${c.scenario}`,`Pregunta: ${c.title}`,`Resultado: ${r.ok?'Correcto':'Por reforzar'} · ${r.points} puntos`,`Elegiste: ${chosenText(c,r)}`,`Respuesta esperada: ${rightText(c)}`,`Explicación: ${c.explanation}`,`Idea clave: ${c.key}`,`FITT-VP: ${c.bridge}`,''];}),
+    'FITT-VP: Frecuencia, Intensidad, Tiempo, Tipo, Volumen y Progresión.','Evaluar → interpretar → prescribir → reevaluar.','Casos ficticios. No constituye una prescripción individual.'].join('\n');
+}
+function downloadResults() {
+  const blob=new Blob(['\ufeff'+buildSummary()],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob);const anchor=document.createElement('a');
+  anchor.href=url;anchor.download='mi-resumen-fitt-lab-niveles.txt';document.body.append(anchor);anchor.click();anchor.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  $('result-notice').textContent='Resumen preparado. Si el navegador permite descargas, lo encontrarás en tu carpeta de descargas.';
+}
+function showModal(title,content) {
+  $('modal-title').textContent=title;$('modal-body').innerHTML=content;const dialog=$('resource-dialog');if(!dialog.open)dialog.showModal();dialog.scrollTop=0;
+}
+function openGuide(mode) {
+  showModal(mode==='how'?'Cómo se juega':'Guía de clase',`<article class="atlas-item"><h3>Una partida, doce personas y tres niveles</h3><p>El juego sortea 12 casos entre un banco de 24: cuatro por nivel, uno de capacidad cardiorrespiratoria, composición corporal, fuerza y flexibilidad. El orden de los núcleos y las opciones se baraja. No se repiten casos dentro de una partida.</p><p><strong>Nivel 1 — Fundamentos:</strong> reconoce pruebas pertinentes, con información directa y una opción correcta.</p><p><strong>Nivel 2 — Interpretación:</strong> analiza factores de confusión, técnica, medicación y límites de lo que puedes concluir. Una opción correcta.</p><p><strong>Nivel 3 — Integración:</strong> integra varias acciones correctas con salud, contexto y FITT-VP. Debes elegir el conjunto completo.</p></article><h3>Ascenso, puntos y rachas</h3><p>Cierras cada nivel al revisar cuatro casos y desbloqueas el siguiente, aunque hayas cometido errores. Acierto completo: 10, 20 y 30 puntos según el nivel; máximo 240. No se dan puntos extra por la racha. Una respuesta incorrecta reinicia la racha, pero no resta puntos ni elimina vidas. No hay cuenta regresiva.</p><p>Las pantallas de ascenso explican qué cambia en la dificultad. Al final hay medallas formativas, mapa por núcleo y nivel, revisión de tus casos y resumen descargable. Los resultados no certifican competencia clínica.</p><h3>Qué cambia al repetir</h3><p>Durante esta sesión, la siguiente partida usa la otra variante de cada núcleo y nivel frente a la partida anterior y vuelve a barajar el orden. Si cierras o recargas el archivo, esa memoria se pierde. El banco es curado y finito: no utiliza IA ni internet para generar casos.</p><h3>Dinámica docente · 20–25 minutos sugeridos</h3><p><strong>Apertura (2 min).</strong> «¿Qué información necesitas antes de prescribir ejercicio?».</p><p><strong>Partida (10–15 min).</strong> Individual o por parejas. Antes de confirmar, justifiquen una elección y expliquen por qué descartan una opción. En el ascenso, identifiquen qué se vuelve más difícil.</p><p><strong>Discusión (5–8 min).</strong> Comparen las personas que les salieron, un factor de confusión y una decisión que cambia FITT-VP. No deben realizar las pruebas físicas: son escenarios de razonamiento.</p><h3>Compartir sin internet</h3><p>Descarga <strong>juego-evaluacion-fitt-vp-niveles.html</strong> y compártelo como archivo. Debe abrirse en un navegador, no solo en la vista previa del aula virtual o de mensajería. El HTML contiene código, estilos y casos. En celulares, algunas apps no ejecutan adjuntos HTML; usa navegador, computadora o vista web.</p><h3>Privacidad y alcance</h3><p>No se solicitan datos personales. Solo se guarda el mejor puntaje de esta versión en el navegador, si permite almacenamiento local. El resumen no se envía automáticamente al docente. Los enlaces de fuentes necesitan internet, pero jugar no.</p><p>Los casos y datos son ficticios, no normas diagnósticas. Los cuatro núcleos no son una clasificación exhaustiva. El juego no diagnostica, cambia medicamentos ni asigna una prescripción clínica automática.</p>`);
+}
+function confirmReset() {
+  showModal('¿Volver al inicio?',`<p>Saldrás de esta partida. Cuando vuelvas a iniciar, el juego sorteará las variantes alternativas de cada núcleo y nivel.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" id="keep-playing">Seguir jugando</button><button class="btn secondary" id="reset-now">Volver al inicio</button></div>`);
+  $('keep-playing').onclick=()=>$('resource-dialog').close();$('reset-now').onclick=()=>{$('resource-dialog').close();renderHome();focusHeading();};
+}
+$('atlas-button').onclick=()=>openAtlas();$('guide-button').onclick=()=>openGuide();$('close-dialog').onclick=()=>$('resource-dialog').close();
+$('resource-dialog').addEventListener('click',event=>{
+  if(event.target===$('resource-dialog')){const rect=event.target.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)event.target.close();}
+});
+renderHome();
+
+</script>
+</body>
+</html>
