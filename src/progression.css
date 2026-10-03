@@ -1,0 +1,63 @@
+.campaign-preview h2 { font-size:34px; line-height:1.2; margin-bottom:24px; }
+.preview-levels { margin:0 0 22px; }
+.preview-levels > div { display:flex; align-items:flex-start; gap:14px; padding:16px 0; border-top:1px solid #ffffff20; }
+.preview-number { font-size:12px; color:#a8cac1; padding-top:3px; }
+.preview-levels strong { font-size:15px; font-weight:650; }
+.preview-levels p { font-size:12px; color:#b7cdc7; margin:5px 0 0; line-height:1.5; }
+.preview-xp { margin-left:auto; white-space:nowrap; font-size:11px; color:#b7cdc7; padding-top:3px; }
+.game-counters { display:flex; justify-content:flex-end; align-items:center; gap:14px; flex-wrap:wrap; }
+.streak { color:var(--muted); font-size:11px; white-space:nowrap; }
+.level-banner { display:flex; justify-content:space-between; align-items:center; gap:15px; border:1px solid #b9d9cc; border-radius:12px; padding:15px 19px; margin-bottom:17px; background:var(--light); }
+.level-banner .eyebrow { color:var(--teal-dark); font-size:9px; display:block; margin-bottom:5px; }
+.level-banner strong { font-size:17px; }
+.level-banner .pill { background:#fff8; border-color:#afcec1; }
+.level-banner.level-2 { background:#eef3fa; border-color:#cbd8ea; }
+.level-banner.level-2 .eyebrow { color:#3c5c7a; }
+.level-banner.level-3 { background:#fff2e6; border-color:#efd2b8; }
+.level-banner.level-3 .eyebrow { color:var(--orange); }
+.case-profile { display:flex; gap:12px; align-items:center; margin:0 0 10px; }
+.case-profile > div { min-width:0; }
+.profile-initial { display:grid; place-items:center; width:39px; height:39px; border-radius:50%; background:var(--light); color:var(--teal-dark); font:19px Georgia,serif; flex-shrink:0; }
+.case-profile strong { font-size:14px; }
+.case-profile p { font-size:11px; line-height:1.5; color:var(--muted); margin:3px 0 0; }
+.case-goal { font-size:12px; color:var(--muted); padding-bottom:16px; border-bottom:1px solid var(--line); margin-bottom:20px; }
+.fitt-bridge { background:#ffffff7d; border-radius:7px; padding:12px; margin-top:13px; }
+.combo-message { font-size:11px!important; color:var(--teal-dark); font-weight:700; }
+.levelup-screen { max-width:760px; text-align:center; margin:20px auto 35px; }
+.levelup-screen h1 { font-size:clamp(33px,4.8vw,53px); margin:17px 0 21px; }
+.levelup-screen .serif { color:var(--teal); }
+.levelup-screen .lead { margin:0 auto; }
+.levelup-stats { display:flex; justify-content:center; gap:25px; margin:22px 0; font-size:12px; color:var(--muted); }
+.levelup-stats strong { color:var(--teal-dark); font-size:19px; }
+.unlocked-card { background:var(--ink); color:white; padding:27px; border-radius:20px; max-width:510px; margin:27px auto 19px; }
+.unlocked-card .eyebrow,.unlocked-card p { color:#b7cdc7; }
+.unlocked-card h2 { margin:10px 0 15px; font-size:34px; }
+.unlocked-card p { font-size:14px; }
+.unlocked-card .pill { color:#d7ece5; border-color:#ffffff30; }
+.levelup-screen > .tiny { max-width:520px; margin:0 auto 23px; }
+.levelup-screen > .text-btn { margin:14px auto 0; }
+.level-results { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:22px 0 27px; }
+.level-result { border:1px solid var(--line); background:white; padding:19px; border-radius:13px; }
+.level-result .eyebrow { font-size:9px; color:var(--muted); }
+.level-result h3 { margin:12px 0; font-size:17px; }
+.level-result p { margin:0 0 10px; font-size:12px; color:var(--muted); }
+.level-result p strong { color:var(--teal-dark); }
+.level-medal { display:block; padding-top:10px; border-top:1px solid var(--line); font-size:10px; color:var(--teal-dark); }
+@media (max-width:760px) {
+  .stage-list { gap:8px; }
+  .stage-list li { flex:1; flex-direction:column; text-align:center; gap:6px; min-width:0; }
+  .stage-list strong { font-size:10px; }
+  .game-counters { max-width:51%; gap:2px 8px; }
+  .progress-head { align-items:flex-start; }
+  .progress-head p { font-size:11px; }
+  .level-banner { padding:13px; }
+  .level-banner .eyebrow { letter-spacing:.09em; }
+  .level-banner strong { font-size:15px; }
+  .level-banner .pill { font-size:10px; padding:5px 8px; }
+  .level-results { grid-template-columns:1fr; gap:10px; }
+  .level-result h3 { margin:8px 0; }
+  .campaign-preview h2 { font-size:29px; }
+  .levelup-stats { gap:15px; flex-wrap:wrap; }
+  .unlocked-card { padding:23px 20px; }
+  .unlocked-card h2 { font-size:30px; }
+}
