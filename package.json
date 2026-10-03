@@ -1,0 +1,11 @@
+{
+  "name": "fittlab-educativo",
+  "version": "2.0.0",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "scripts": {
+    "build": "python3 scripts/build.py",
+    "test": "python3 scripts/build.py && node tests/test_game.cjs"
+  },
+  "devDependencies": { "jsdom": "26.1.0" }
+}
